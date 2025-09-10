@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACM算法研究实验室 - 静态网站</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .nav-item {
+            display: block;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .nav-item:hover {
+            transform: translateY(-5px);
+        }
+        .info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .timestamp {
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏛️ ACM算法研究实验室</h1>
+        
+        <div class="info">
+            <h3>📋 网站说明</h3>
+            <p>这是从Flask动态网站转换而来的静态网站版本，包含了实验室的所有核心内容：</p>
+            <ul>
+                <li>✅ 实验室介绍和团队成员信息</li>
+                <li>✅ 算法研究成果和竞赛获奖记录</li>
+                <li>✅ 学术论文和科研项目展示</li>
+                <li>✅ 科技创新成果和实验室动态</li>
+                <li>✅ 完整的页面导航和数据展示</li>
+            </ul>
+            <p><strong>注意：</strong>此为静态版本，不支持实时数据更新和管理后台功能。</p>
+        </div>
+        
+        <div class="nav-grid">
+            <a href="index.html" class="nav-item">
+                <h3>🏠 实验室首页</h3>
+                <p>实验室概况和最新动态</p>
+            </a>
+            
+            <a href="team.html" class="nav-item">
+                <h3>👥 团队成员</h3>
+                <p>实验室成员介绍</p>
+            </a>
+            
+            <a href="algorithm.html" class="nav-item">
+                <h3>🧮 算法研究</h3>
+                <p>算法成果和竞赛获奖</p>
+            </a>
+            
+            <a href="paper.html" class="nav-item">
+                <h3>📚 学术论文</h3>
+                <p>发表的学术论文</p>
+            </a>
+            
+            <a href="innovation.html" class="nav-item">
+                <h3>🚀 科技创新</h3>
+                <p>创新项目和成果展示</p>
+            </a>
+            
+            <a href="dynamic.html" class="nav-item">
+                <h3>📢 实验室动态</h3>
+                <p>最新通知和活动</p>
+            </a>
+            
+            <a href="introduction.html" class="nav-item">
+                <h3>ℹ️ 实验室介绍</h3>
+                <p>详细介绍和发展历程</p>
+            </a>
+            
+            <a href="matrix.html" class="nav-item">
+                <h3>🎯 Matrix</h3>
+                <p>特色展示页面</p>
+            </a>
+        </div>
+        
+        <div class="timestamp">
+            <p>🕒 静态网站生成时间: 2025-09-10 18:33:44</p>
+            <p>🔧 由 Flask To Static Converter 自动生成</p>
+        </div>
+    </div>
+</body>
+</html>

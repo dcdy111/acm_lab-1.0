@@ -1,0 +1,4243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACM算法研究实验室</title>
+    <link href="https:/fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;500&display=swap" rel="stylesheet">
+    
+    <!-- 新增外部资源 -->
+    <script src="https:/cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https:/cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https:/cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/v4-shims.min.css">
+<link rel="stylesheet" href="./highlight.css">
+<script defer src="./highlight.js"></script>
+    <script src="https:/cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https:/cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https:/cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --secondary: #00ffcc;
+            --accent: #ff2d75;
+            --accent2: #b967ff;
+            --dark-bg: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 100%);
+            --text-light: #e0e0ff;
+            --text: var(--text-light);
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            color: var(--text-light);
+            background: var(--dark-bg);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 粒子背景（展示相关，保留） */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        /* 导航栏（展示相关，保留） */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            backdrop-filter: blur(10px);
+            background: var(--glass);
+            border-bottom: 1px solid rgba(58, 134, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo::before {
+            content: "";
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233a86ff"><path d="M12 2L1 12h3v9h6v-6h4v6h6v-9h3L12 2zm0 2.8L18 10v9h-2v-6H8v6H6v-9l6-7.2z"/></svg>') no-repeat center;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            white-space: nowrap;
+        }
+        
+        .nav-link {
+            position: relative;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 500;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover { color: var(--primary); }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after { width: 100%; }
+        
+        /* 下拉菜单（展示相关，保留） */
+        .dropdown { position: relative; }
+        
+        .dropdown-content {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            min-width: 220px;
+            background: rgba(10, 10, 26, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(58, 134, 255, 0.25);
+            border-radius: 8px;
+            padding: 0.6rem 0;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(6px);
+            transition: all 0.22s ease;
+            z-index: 200;
+            white-space: nowrap;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-link {
+            display: block;
+            padding: 0.5rem 1.25rem;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.18s ease;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .dropdown-link:hover {
+            background: rgba(58, 134, 255, 0.12);
+            color: var(--primary);
+            padding-left: 1.5rem;
+        }
+        
+        /* 页脚（展示相关，保留） */
+        footer {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 3rem 5%;
+            text-align: center;
+            margin-top: 5rem;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        
+        .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-link { color: var(--text-light); text-decoration: none; transition: color 0.3s; }
+        .footer-link:hover { color: var(--primary); }
+        
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(0, 240, 255, 0.1);
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+        
+        .social-icon i {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .social-icon:hover i {
+            background: none;
+            -webkit-background-clip: initial;
+            background-clip: initial;
+            color: var(--dark);
+        }
+        
+        .copyright { font-size: 0.9rem; color: rgba(224, 224, 255, 0.6); }
+        
+        /* 必要动画（logo 脉冲） */
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        
+        /* 新增算法组招生页面样式 */
+        .recruitment-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* 配置Tailwind自定义主题 */
+        .neon-blue { color: #00ffff; }
+        .neon-pink { color: #ff00ff; }
+        .neon-green { color: #00ff00; }
+        .neon-yellow { color: #ffff00; }
+        .dark-bg { background-color: #0a0a16; }
+        .dark-card { background-color: #121229; }
+        
+        .text-shadow-neon-blue {
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.7), 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .text-shadow-neon-pink {
+            text-shadow: 0 0 5px rgba(255, 0, 255, 0.7), 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+        .border-glow-blue {
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.7), 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .border-glow-pink {
+            box-shadow: 0 0 5px rgba(255, 0, 255, 0.7), 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+        .hologram {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 255, 255, 0.1),
+                rgba(0, 255, 255, 0.05)
+            );
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+        .hologram::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(0, 255, 255, 0.8),
+                transparent
+            );
+            animation: scan 4s linear infinite;
+            background-size: 200% 100%;
+        }
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .circuit-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300ffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: flow 20s linear infinite;
+        }
+        .math-formula {
+            position: absolute;
+            color: rgba(0, 255, 255, 0.5);
+            font-family: 'Times New Roman', serif;
+            pointer-events: none;
+        }
+        
+        @keyframes scan {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 0% 100%; }
+        }
+        
+        @keyframes flow {
+            0% { background-position: 0 0; }
+            100% { background-position: -1000px 0; }
+        }
+        
+        @keyframes mathFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, -10px) rotate(2deg); }
+            50% { transform: translate(5px, -15px) rotate(-1deg); }
+            75% { transform: translate(-5px, -5px) rotate(1deg); }
+        }
+        
+        .animate-math-float {
+            animation: mathFloat 8s ease-in-out infinite;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        /* 响应式布局 */
+        .container {
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .container { max-width: 640px; }
+        }
+        
+        @media (min-width: 768px) {
+            .container { max-width: 768px; }
+        }
+        
+        @media (min-width: 1024px) {
+            .container { max-width: 1024px; }
+        }
+        
+        @media (min-width: 1280px) {
+            .container { max-width: 1280px; }
+        }
+        
+        /* Flexbox和Grid样式 */
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .hidden { display: none; }
+        .block { display: block; }
+        .inline-block { display: inline-block; }
+        .items-center { align-items: center; }
+        .items-start { align-items: flex-start; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .justify-end { justify-content: flex-end; }
+        .flex-col { flex-direction: column; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .gap-10 { gap: 2.5rem; }
+        .gap-12 { gap: 3rem; }
+        
+        /* 网格系统 */
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        
+        /* 宽度和高度 */
+        .w-full { width: 100%; }
+        .w-6 { width: 1.5rem; }
+        .w-10 { width: 2.5rem; }
+        .w-12 { width: 3rem; }
+        .w-14 { width: 3.5rem; }
+        .w-20 { width: 5rem; }
+        .w-24 { width: 6rem; }
+        .w-64 { width: 16rem; }
+        .h-1 { height: 0.25rem; }
+        .h-6 { height: 1.5rem; }
+        .h-10 { height: 2.5rem; }
+        .h-12 { height: 3rem; }
+        .h-14 { height: 3.5rem; }
+        .h-20 { height: 5rem; }
+        .h-64 { height: 16rem; }
+        .h-80 { height: 20rem; }
+        .max-w-2xl { max-width: 42rem; }
+        .max-w-3xl { max-width: 48rem; }
+        
+        /* 内边距和外边距 */
+        .p-3 { padding: 0.75rem; }
+        .p-6 { padding: 1.5rem; }
+        .p-8 { padding: 2rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+        .pt-4 { padding-top: 1rem; }
+        .pt-8 { padding-top: 2rem; }
+        .pt-32 { padding-top: 8rem; }
+        .pb-20 { padding-bottom: 5rem; }
+        .pr-16 { padding-right: 4rem; }
+        .pl-16 { padding-left: 4rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mb-10 { margin-bottom: 2.5rem; }
+        .mb-16 { margin-bottom: 4rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        
+        /* 定位 */
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .fixed { position: fixed; }
+        .inset-0 { inset: 0px; }
+        .top-0 { top: 0px; }
+        .left-0 { left: 0px; }
+        .right-0 { right: 0px; }
+        .bottom-0 { bottom: 0px; }
+        .z-10 { z-index: 10; }
+        
+        /* 文字样式 */
+        .text-center { text-align: center; }
+        .text-white { color: rgb(255 255 255); }
+        .text-gray-200 { color: rgb(229 231 235); }
+        .text-gray-300 { color: rgb(209 213 219); }
+        .text-gray-400 { color: rgb(156 163 175); }
+        .text-gray-500 { color: rgb(107 114 128); }
+        .text-gray-700 { color: rgb(55 65 81); }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .text-4xl { font-size: 2.25rem; }
+        .text-5xl { font-size: 3rem; }
+        .text-6xl { font-size: 3.75rem; }
+        .text-7xl { font-size: 4.5rem; }
+        .font-medium { font-weight: 500; }
+        .font-bold { font-weight: 700; }
+        .leading-tight { line-height: 1.25; }
+        
+        /* 边框和圆角 */
+        .border { border-width: 1px; }
+        .border-4 { border-width: 4px; }
+        .border-gray-700 { border-color: rgb(55 65 81); }
+        .border-gray-800 { border-color: rgb(31 41 55); }
+        .border-t { border-top-width: 1px; }
+        .rounded-md { border-radius: 0.375rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-full { border-radius: 9999px; }
+        
+        /* 背景 */
+        .bg-dark-bg { background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 100%); }
+        .bg-dark-card { background-color: #121229; }
+        .bg-gray-800 { background-color: rgb(31 41 55); }
+        
+        /* 变换和过渡 */
+        .transform { transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
+        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        .transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        .transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        .duration-300 { transition-duration: 300ms; }
+        .duration-500 { transition-duration: 500ms; }
+        .hover\:scale-110:hover { --tw-scale-x: 1.1; --tw-scale-y: 1.1; }
+        .hover\:-translate-y-2:hover { --tw-translate-y: -0.5rem; }
+        .hover\:border-glow-blue:hover { box-shadow: 0 0 5px rgba(0, 255, 255, 0.7), 0 0 10px rgba(0, 255, 255, 0.5); }
+        .hover\:bg-neon-blue\/20:hover { background-color: rgba(0, 255, 255, 0.2); }
+        .hover\:text-neon-blue:hover { color: #00ffff; }
+        .group:hover .group-hover\:scale-110 { --tw-scale-x: 1.1; --tw-scale-y: 1.1; }
+        .group:hover .group-hover\:scale-150 { --tw-scale-x: 1.5; --tw-scale-y: 1.5; }
+        
+        /* 表单元素 */
+        input[type="text"], input[type="email"], input[type="tel"], textarea, input[type="file"] {
+            appearance: none;
+            outline: none;
+        }
+        
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, textarea:focus {
+            border-color: #00ffff;
+        }
+        
+        /* 响应式 */
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .md\:flex-row { flex-direction: row; }
+            .md\:w-1\/2 { width: 50%; }
+            .md\:w-64 { width: 16rem; }
+            .md\:pr-16 { padding-right: 4rem; }
+            .md\:pl-16 { padding-left: 4rem; }
+            .md\:mb-0 { margin-bottom: 0px; }
+            .md\:mb-24 { margin-bottom: 6rem; }
+            .md\:text-right { text-align: right; }
+            .md\:text-4xl { font-size: 2.25rem; }
+            .md\:text-6xl { font-size: 3.75rem; }
+            .md\:order-1 { order: 1; }
+            .md\:order-2 { order: 2; }
+            .md\:justify-end { justify-content: flex-end; }
+            .md\:float-right { float: right; }
+            .md\:mx-0 { margin-left: 0px; margin-right: 0px; }
+            .md\:ml-auto { margin-left: auto; }
+            .md\:mr-0 { margin-right: 0px; }
+            .md\:block { display: block; }
+            .md\:hidden { display: none; }
+        }
+        
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .lg\:text-7xl { font-size: 4.5rem; }
+        }
+        
+        /* 空间和溢出 */
+        .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
+        .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
+        .overflow-hidden { overflow: hidden; }
+        .overflow-x-hidden { overflow-x: hidden; }
+        
+        /* 透明度 */
+        .opacity-50 { opacity: 0.5; }
+        
+        /* 导航栏样式 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(58, 134, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #3a86ff, #00ffcc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo::before {
+            content: "";
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233a86ff"><path d="M12 2L1 12h3v9h6v-6h4v6h6v-9h3L12 2zm0 2.8L18 10v9h-2v-6H8v6H6v-9l6-7.2z"/></svg>') no-repeat center;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            white-space: nowrap;
+        }
+        
+        .nav-link {
+            position: relative;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 500;
+            color: #e0e0ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #3a86ff;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #3a86ff;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .dropdown {
+            position: relative;
+        }
+        
+        .dropdown-content {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            min-width: 220px;
+            background: rgba(10, 10, 26, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(58, 134, 255, 0.25);
+            border-radius: 8px;
+            padding: 0.6rem 0;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(6px);
+            transition: all 0.22s ease;
+            z-index: 200;
+            white-space: nowrap;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-link {
+            display: block;
+            padding: 0.5rem 1.25rem;
+            color: #e0e0ff;
+            text-decoration: none;
+            transition: all 0.18s ease;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .dropdown-link:hover {
+            background: rgba(58, 134, 255, 0.12);
+            color: #3a86ff;
+            padding-left: 1.5rem;
+        }
+        
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        .fullscreen-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 26, 0.95);
+            backdrop-filter: blur(15px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+        }
+        
+        .fullscreen-nav.active {
+            transform: translateY(0);
+        }
+        
+        .fullscreen-nav .close-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #e0e0ff;
+            transition: color 0.3s;
+        }
+        
+        .fullscreen-nav .close-btn:hover {
+            color: #ff2d75;
+        }
+        
+        .fullscreen-nav-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .fullscreen-nav-link {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: #e0e0ff;
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+        }
+        
+        .fullscreen-nav-link:hover {
+            color: #3a86ff;
+        }
+        
+        .fullscreen-nav-link::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(58, 134, 255, 0.1);
+            z-index: -1;
+            transition: width 0.3s;
+        }
+        
+        .fullscreen-nav-link:hover::before {
+            width: 100%;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* ========================= 统一滚动条美化样式 ========================= */
+        /* 全局滚动条 - 竖直方向 */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+        
+        /* 滚动条轨道 */
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            border: 1px solid rgba(58, 134, 255, 0.1);
+        }
+        
+        /* 滚动条滑块 */
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3a86ff 0%, #00ffcc 50%, #b967ff 100%);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(58, 134, 255, 0.2);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #00ffcc 0%, #ff2d75 50%, #3a86ff 100%);
+            box-shadow: 0 4px 15px rgba(58, 134, 255, 0.4);
+            transform: scale(1.05);
+        }
+        
+        /* 滚动条箭头按钮 */
+        ::-webkit-scrollbar-button {
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(45deg, #3a86ff, #00ffcc);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        /* 竖直滚动条上箭头 */
+        ::-webkit-scrollbar-button:vertical:start:decrement {
+            background: linear-gradient(45deg, #3a86ff, #00ffcc),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M7 14l5-5 5 5z"/></svg>') center/60% no-repeat;
+        }
+        
+        /* 竖直滚动条下箭头 */
+        ::-webkit-scrollbar-button:vertical:end:increment {
+            background: linear-gradient(45deg, #3a86ff, #00ffcc),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M7 10l5 5 5-5z"/></svg>') center/60% no-repeat;
+        }
+        
+        /* 水平滚动条左箭头 */
+        ::-webkit-scrollbar-button:horizontal:start:decrement {
+            background: linear-gradient(45deg, #3a86ff, #00ffcc),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M14 7l-5 5 5 5z"/></svg>') center/60% no-repeat;
+        }
+        
+        /* 水平滚动条右箭头 */
+        ::-webkit-scrollbar-button:horizontal:end:increment {
+            background: linear-gradient(45deg, #3a86ff, #00ffcc),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M10 7l5 5-5 5z"/></svg>') center/60% no-repeat;
+        }
+        
+        /* 箭头按钮悬停效果 */
+        ::-webkit-scrollbar-button:hover {
+            background: linear-gradient(45deg, #ff2d75, #b967ff) !important;
+            box-shadow: 0 0 10px rgba(58, 134, 255, 0.6);
+            transform: scale(1.1);
+        }
+        
+        /* 箭头按钮点击效果 */
+        ::-webkit-scrollbar-button:active {
+            background: linear-gradient(45deg, #00ffcc, #3a86ff) !important;
+            transform: scale(0.95);
+        }
+        
+        /* 滚动条角落 */
+        ::-webkit-scrollbar-corner {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            border: 1px solid rgba(58, 134, 255, 0.1);
+        }
+        
+        /* Firefox滚动条样式 */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #3a86ff rgba(255, 255, 255, 0.08);
+        }
+        
+        /* 移动端滚动条优化 */
+        @media (max-width: 768px) {
+            ::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+            }
+        }
+        /* ========================= 滚动条样式结束 ========================= */
+    </style>
+
+
+    <!-- 静态数据注入 - 完美复刻模式 -->
+    <script>
+    // 静态数据存储
+    window.STATIC_DATA = {
+    "team_members": [
+        {
+            "grade": "2024级",
+            "members": [
+                {
+                    "created_at": "2025-09-05T19:46:52.113011",
+                    "desc": "管理科学与工程类",
+                    "description": "管理科学与工程类",
+                    "email": "",
+                    "grade": "2024级",
+                    "id": 71,
+                    "image_url": "",
+                    "img": "",
+                    "name": "胡家辉",
+                    "order_index": 12,
+                    "position": "本科在读",
+                    "qq": "3515918974",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.760381",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:46:11.867375",
+                    "desc": "管理科学与工程类",
+                    "description": "管理科学与工程类",
+                    "email": "",
+                    "grade": "2024级",
+                    "id": 70,
+                    "image_url": "",
+                    "img": "",
+                    "name": "张浩博",
+                    "order_index": 13,
+                    "position": "本科在读",
+                    "qq": "2283455155",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.771090",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:47:31.375385",
+                    "desc": "管理科学与工程类",
+                    "description": "管理科学与工程类",
+                    "email": "",
+                    "grade": "2024级",
+                    "id": 72,
+                    "image_url": "",
+                    "img": "",
+                    "name": "代冰洋",
+                    "order_index": 14,
+                    "position": "本科在读",
+                    "qq": "3523592063",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.782851",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:48:16.607530",
+                    "desc": "管理科学与工程类",
+                    "description": "管理科学与工程类",
+                    "email": "",
+                    "grade": "2024级",
+                    "id": 73,
+                    "image_url": "",
+                    "img": "",
+                    "name": "刘丹",
+                    "order_index": 15,
+                    "position": "本科在读",
+                    "qq": "1840326810",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.792380",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:49:19.644415",
+                    "desc": "大数据管理与应用",
+                    "description": "大数据管理与应用",
+                    "email": "",
+                    "grade": "2024级",
+                    "id": 75,
+                    "image_url": "",
+                    "img": "",
+                    "name": "茹君浩",
+                    "order_index": 16,
+                    "position": "本科在读",
+                    "qq": "2741043552",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.801836",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:48:51.155492",
+                    "desc": "管理科学与工程类",
+                    "description": "管理科学与工程类",
+                    "email": "",
+                    "grade": "2024级",
+                    "id": 74,
+                    "image_url": "",
+                    "img": "",
+                    "name": "徐竟凇",
+                    "order_index": 17,
+                    "position": "本科在读",
+                    "qq": "2086587889",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.811157",
+                    "wechat": ""
+                }
+            ]
+        },
+        {
+            "grade": "2023级",
+            "members": [
+                {
+                    "created_at": "2025-08-29 11:12:34.447336",
+                    "desc": "信息系统管理",
+                    "description": "信息系统管理",
+                    "email": "",
+                    "grade": "2023级",
+                    "id": 49,
+                    "image_url": "",
+                    "img": "",
+                    "name": "曾路平",
+                    "order_index": 6,
+                    "position": "本科在读",
+                    "qq": "2689847735",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.679166",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-08-29 11:12:34.447336",
+                    "desc": "大数据管理与应用",
+                    "description": "大数据管理与应用",
+                    "email": "",
+                    "grade": "2023级",
+                    "id": 46,
+                    "image_url": "",
+                    "img": "",
+                    "name": "李雨璐",
+                    "order_index": 7,
+                    "position": "本科在读",
+                    "qq": "2243385440",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.692063",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-08-29 11:12:34.447336",
+                    "desc": "信息系统管理",
+                    "description": "信息系统管理",
+                    "email": "",
+                    "grade": "2023级",
+                    "id": 48,
+                    "image_url": "",
+                    "img": "",
+                    "name": "柳晓洲",
+                    "order_index": 8,
+                    "position": "本科在读",
+                    "qq": "1551387412",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.712366",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:44:58.875403",
+                    "desc": "信息系统管理",
+                    "description": "信息系统管理",
+                    "email": "",
+                    "grade": "2023级",
+                    "id": 68,
+                    "image_url": "",
+                    "img": "",
+                    "name": "刘佳豪",
+                    "order_index": 9,
+                    "position": "本科在读",
+                    "qq": "212537308",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.725539",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:45:39.816976",
+                    "desc": "信息系统管理",
+                    "description": "信息系统管理",
+                    "email": "",
+                    "grade": "2023级",
+                    "id": 69,
+                    "image_url": "",
+                    "img": "",
+                    "name": "余子烨",
+                    "order_index": 10,
+                    "position": "本科在读",
+                    "qq": "3212830368",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.735903",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-08-29 11:12:34.447336",
+                    "desc": "大数据管理与应用",
+                    "description": "大数据管理与应用",
+                    "email": "",
+                    "grade": "2023级",
+                    "id": 44,
+                    "image_url": "",
+                    "img": "",
+                    "name": "肖衍南",
+                    "order_index": 11,
+                    "position": "本科在读",
+                    "qq": "1459157410",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.751123",
+                    "wechat": ""
+                }
+            ]
+        },
+        {
+            "grade": "2022级",
+            "members": [
+                {
+                    "created_at": "2025-08-29 11:12:34.447336",
+                    "desc": "信息系统管理",
+                    "description": "信息系统管理",
+                    "email": "",
+                    "grade": "2022级",
+                    "id": 45,
+                    "image_url": "",
+                    "img": "",
+                    "name": "邱智柯",
+                    "order_index": 1,
+                    "position": "本科在读",
+                    "qq": "2337429214",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-10T16:16:34.114678",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-08-29 11:12:34.447336",
+                    "desc": "信息系统管理",
+                    "description": "信息系统管理",
+                    "email": "",
+                    "grade": "2022级",
+                    "id": 42,
+                    "image_url": "",
+                    "img": "",
+                    "name": "罗晓龙",
+                    "order_index": 2,
+                    "position": "本科在读",
+                    "qq": "2225338824",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-10T16:17:15.340689",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:43:38.465169",
+                    "desc": "信息系统管理",
+                    "description": "信息系统管理",
+                    "email": "",
+                    "grade": "2022级",
+                    "id": 66,
+                    "image_url": "",
+                    "img": "",
+                    "name": "李卓燕",
+                    "order_index": 3,
+                    "position": "本科在读",
+                    "qq": "953328919",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.611301",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:44:15.525208",
+                    "desc": "信息系统管理",
+                    "description": "信息系统管理",
+                    "email": "",
+                    "grade": "2022级",
+                    "id": 67,
+                    "image_url": "",
+                    "img": "",
+                    "name": "吴悠",
+                    "order_index": 4,
+                    "position": "本科在读",
+                    "qq": "1726094788",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.625642",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:41:43.142225",
+                    "desc": "信息系统管理",
+                    "description": "信息系统管理",
+                    "email": "",
+                    "grade": "2022级",
+                    "id": 65,
+                    "image_url": "",
+                    "img": "",
+                    "name": "杨雅媚",
+                    "order_index": 5,
+                    "position": "本科在读",
+                    "qq": "1969853988",
+                    "role": "本科在读",
+                    "updated_at": "2025-09-09T13:58:13.653754",
+                    "wechat": ""
+                }
+            ]
+        },
+        {
+            "grade": "2021级",
+            "members": [
+                {
+                    "created_at": "2025-09-05T19:38:34.144513",
+                    "desc": "本科信息系统管理",
+                    "description": "本科信息系统管理",
+                    "email": "",
+                    "grade": "2021级",
+                    "id": 61,
+                    "image_url": "",
+                    "img": "",
+                    "name": "施源",
+                    "order_index": 18,
+                    "position": "已毕业",
+                    "qq": "1504715445",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.820112",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:37:34.471076",
+                    "desc": "本科信息系统管理",
+                    "description": "本科信息系统管理",
+                    "email": "",
+                    "grade": "2021级",
+                    "id": 60,
+                    "image_url": "",
+                    "img": "",
+                    "name": "陈龙刚",
+                    "order_index": 19,
+                    "position": "已毕业",
+                    "qq": "1524573182",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.828570",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:36:32.474404",
+                    "desc": "本科管科",
+                    "description": "本科管科",
+                    "email": "",
+                    "grade": "2021级",
+                    "id": 59,
+                    "image_url": "",
+                    "img": "",
+                    "name": "杨潇",
+                    "order_index": 20,
+                    "position": "已毕业",
+                    "qq": "2325625177",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.838713",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:39:32.452454",
+                    "desc": "本科信息系统管理",
+                    "description": "本科信息系统管理",
+                    "email": "",
+                    "grade": "2021级",
+                    "id": 62,
+                    "image_url": "",
+                    "img": "",
+                    "name": "孙祺炜",
+                    "order_index": 21,
+                    "position": "已毕业",
+                    "qq": "1031543877",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.850348",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:40:51.413049",
+                    "desc": "信管",
+                    "description": "信管",
+                    "email": "",
+                    "grade": "2021级",
+                    "id": 64,
+                    "image_url": "",
+                    "img": "",
+                    "name": "饶俊伟",
+                    "order_index": 22,
+                    "position": "已毕业",
+                    "qq": "415823581",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.859192",
+                    "wechat": ""
+                }
+            ]
+        },
+        {
+            "grade": "2020级",
+            "members": [
+                {
+                    "created_at": "2025-09-05T19:40:09.934500",
+                    "desc": "本科信管",
+                    "description": "本科信管",
+                    "email": "",
+                    "grade": "2020级",
+                    "id": 63,
+                    "image_url": "",
+                    "img": "",
+                    "name": "朱晓坛",
+                    "order_index": 23,
+                    "position": "已毕业",
+                    "qq": "2917190403",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.869409",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-08-29 11:12:34.447336",
+                    "desc": "已毕业",
+                    "description": "已毕业",
+                    "email": "",
+                    "grade": "2020级",
+                    "id": 43,
+                    "image_url": "",
+                    "img": "",
+                    "name": "黄梓豪",
+                    "order_index": 24,
+                    "position": "已毕业",
+                    "qq": "2821102806",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.880103",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-05T19:35:09.953889",
+                    "desc": "本科信管",
+                    "description": "本科信管",
+                    "email": "",
+                    "grade": "2020级",
+                    "id": 58,
+                    "image_url": "",
+                    "img": "",
+                    "name": "王忠豪",
+                    "order_index": 25,
+                    "position": "已毕业",
+                    "qq": "2559026942",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.885409",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-08-29 11:12:34.437104",
+                    "desc": "信管",
+                    "description": "信管",
+                    "email": "",
+                    "grade": "2020级",
+                    "id": 39,
+                    "image_url": "",
+                    "img": "",
+                    "name": "李喆",
+                    "order_index": 26,
+                    "position": "已毕业",
+                    "qq": "1589396476",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.895155",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-08-29 11:12:34.447336",
+                    "desc": "本科信息系统管理",
+                    "description": "本科信息系统管理",
+                    "email": "",
+                    "grade": "2020级",
+                    "id": 41,
+                    "image_url": "",
+                    "img": "",
+                    "name": "蒲美琴",
+                    "order_index": 27,
+                    "position": "已毕业",
+                    "qq": "3083177927",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.905386",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-01T10:14:51.449132",
+                    "desc": "本科信管",
+                    "description": "本科信管",
+                    "email": "",
+                    "grade": "2020级",
+                    "id": 55,
+                    "image_url": "",
+                    "img": "",
+                    "name": "柳湘",
+                    "order_index": 28,
+                    "position": "已毕业",
+                    "qq": "837195776",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.915758",
+                    "wechat": ""
+                }
+            ]
+        },
+        {
+            "grade": "2019级",
+            "members": [
+                {
+                    "created_at": "2025-09-06T20:36:29.716166",
+                    "desc": "本科计算机科学",
+                    "description": "本科计算机科学",
+                    "email": "",
+                    "grade": "2019级",
+                    "id": 76,
+                    "image_url": "",
+                    "img": "",
+                    "name": "吴银杰",
+                    "order_index": 29,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.921129",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-06T20:37:08.932051",
+                    "desc": "本科计算机科学",
+                    "description": "本科计算机科学",
+                    "email": "",
+                    "grade": "2019级",
+                    "id": 77,
+                    "image_url": "",
+                    "img": "",
+                    "name": "蒋杰",
+                    "order_index": 30,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.933280",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-06T20:37:42.348399",
+                    "desc": "本科计算机科学",
+                    "description": "本科计算机科学",
+                    "email": "",
+                    "grade": "2019级",
+                    "id": 78,
+                    "image_url": "",
+                    "img": "",
+                    "name": "邓小巧",
+                    "order_index": 31,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.946115",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-06T20:38:16.899559",
+                    "desc": "本科计算机科学",
+                    "description": "本科计算机科学",
+                    "email": "",
+                    "grade": "2019级",
+                    "id": 79,
+                    "image_url": "",
+                    "img": "",
+                    "name": "博佳旭",
+                    "order_index": 32,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.952911",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-06T20:39:25.867568",
+                    "desc": "本科信息系统管理",
+                    "description": "本科信息系统管理",
+                    "email": "",
+                    "grade": "2019级",
+                    "id": 80,
+                    "image_url": "",
+                    "img": "",
+                    "name": "田梦垚",
+                    "order_index": 33,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.963871",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-09T12:43:31.756428",
+                    "desc": "",
+                    "description": "",
+                    "email": "",
+                    "grade": "2019级",
+                    "id": 91,
+                    "image_url": "",
+                    "img": "",
+                    "name": "尹志欣",
+                    "order_index": 34,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.970214",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-09T12:42:50.790005",
+                    "desc": "",
+                    "description": "",
+                    "email": "",
+                    "grade": "2019级",
+                    "id": 90,
+                    "image_url": "",
+                    "img": "",
+                    "name": "陈羿羽",
+                    "order_index": 35,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.984371",
+                    "wechat": ""
+                }
+            ]
+        },
+        {
+            "grade": "2018级",
+            "members": [
+                {
+                    "created_at": "2025-09-06T20:39:58.065269",
+                    "desc": "本科计算机科学",
+                    "description": "本科计算机科学",
+                    "email": "",
+                    "grade": "2018级",
+                    "id": 81,
+                    "image_url": "",
+                    "img": "",
+                    "name": "彭潇",
+                    "order_index": 36,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:13.993269",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-06T20:40:50.100631",
+                    "desc": "本科计算机科学",
+                    "description": "本科计算机科学",
+                    "email": "",
+                    "grade": "2018级",
+                    "id": 82,
+                    "image_url": "",
+                    "img": "",
+                    "name": "王小雨",
+                    "order_index": 37,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:14.001188",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-06T20:41:47.064288",
+                    "desc": "",
+                    "description": "",
+                    "email": "",
+                    "grade": "2018级",
+                    "id": 83,
+                    "image_url": "",
+                    "img": "",
+                    "name": "吕波龙",
+                    "order_index": 38,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:14.010366",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-06T20:45:52.174475",
+                    "desc": "",
+                    "description": "",
+                    "email": "",
+                    "grade": "2018级",
+                    "id": 84,
+                    "image_url": "",
+                    "img": "",
+                    "name": "吴昭儒",
+                    "order_index": 39,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:14.021224",
+                    "wechat": ""
+                }
+            ]
+        },
+        {
+            "grade": "2017级",
+            "members": [
+                {
+                    "created_at": "2025-09-09T12:40:08.870297",
+                    "desc": "",
+                    "description": "",
+                    "email": "",
+                    "grade": "2017级",
+                    "id": 85,
+                    "image_url": "",
+                    "img": "",
+                    "name": "科徐涛",
+                    "order_index": 40,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:14.030158",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-09T12:40:37.769240",
+                    "desc": "",
+                    "description": "",
+                    "email": "",
+                    "grade": "2017级",
+                    "id": 86,
+                    "image_url": "",
+                    "img": "",
+                    "name": "田瑶林",
+                    "order_index": 41,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:14.045284",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-09T12:41:00.115290",
+                    "desc": "",
+                    "description": "",
+                    "email": "",
+                    "grade": "2017级",
+                    "id": 87,
+                    "image_url": "",
+                    "img": "",
+                    "name": "徐磊",
+                    "order_index": 42,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:14.055307",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-09T12:41:31.890700",
+                    "desc": "",
+                    "description": "",
+                    "email": "",
+                    "grade": "2017级",
+                    "id": 88,
+                    "image_url": "",
+                    "img": "",
+                    "name": "梁龙淼",
+                    "order_index": 43,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:14.065588",
+                    "wechat": ""
+                },
+                {
+                    "created_at": "2025-09-09T12:42:13.488546",
+                    "desc": "",
+                    "description": "",
+                    "email": "",
+                    "grade": "2017级",
+                    "id": 89,
+                    "image_url": "",
+                    "img": "",
+                    "name": "徐瀚铸",
+                    "order_index": 44,
+                    "position": "已毕业",
+                    "qq": "",
+                    "role": "已毕业",
+                    "updated_at": "2025-09-09T13:58:14.077602",
+                    "wechat": ""
+                }
+            ]
+        }
+    ],
+    "papers": [
+        {
+            "abstract": "",
+            "authors": [
+                "Qin, Yuhao ;Zhang, Jinguo ;Qiu, Zhike ;Chen, Zichong ;Cai, Rui"
+            ],
+            "categories": [
+                32
+            ],
+            "category_ids": "[32]",
+            "citation_count": 0,
+            "code_url": "",
+            "created_at": "2025-08-29 11:50:23",
+            "demo_url": "",
+            "doi": "",
+            "id": 17,
+            "journal": "JOURNALOEKINGSAUDUNIVERSITV COMPUTERANDINFORMATIONSCIENCES",
+            "order_index": 2,
+            "pdf_url": "https://www.scopus.com/pages/publications/105007866049",
+            "status": "published",
+            "title": "Boosting complex evidence theory with complex belief Renyi divergence for multi-source information fusion",
+            "updated_at": "2025-09-07T17:04:59.687200",
+            "video_url": "",
+            "year": 2025
+        },
+        {
+            "abstract": "",
+            "authors": [
+                "Qiu, Zhike ;Qin, Yuhao ;Chen, Zichong ;Zeng, Luping ;Cai, Rui"
+            ],
+            "categories": [
+                32
+            ],
+            "category_ids": "[32]",
+            "citation_count": 0,
+            "code_url": "",
+            "created_at": "2025-08-29 11:50:23",
+            "demo_url": "",
+            "doi": "",
+            "id": 15,
+            "journal": "COMPLEX & INTELLIGENT SYSTEMS",
+            "order_index": 3,
+            "pdf_url": "https://www.scopus.com/pages/publications/105010597723",
+            "status": "published",
+            "title": "Overcoming negative weighting in uncertainty-based methods: a multi-uncertainty clustering method for evidence fusion",
+            "updated_at": "2025-09-07T17:06:25.962473",
+            "video_url": "",
+            "year": 2025
+        },
+        {
+            "abstract": "",
+            "authors": [
+                "Qiu, Zhike  ;Qin, Yuhao ;Zeng, Luping ;Wen, Liangming"
+            ],
+            "categories": [
+                32
+            ],
+            "category_ids": "[32]",
+            "citation_count": 0,
+            "code_url": "",
+            "created_at": "2025-08-29 11:50:23",
+            "demo_url": "",
+            "doi": "",
+            "id": 16,
+            "journal": "Lecture Notes in Computer Science",
+            "order_index": 4,
+            "pdf_url": "https://www.scopus.com/pages/publications/105012475216",
+            "status": "published",
+            "title": "MBFSNet: Multi-scale Binocular Fusion Semantic Co-occurrence Network for Multi-label Fundus Disease Diagnosis",
+            "updated_at": "2025-09-07T17:07:40.189503",
+            "video_url": "",
+            "year": 2025
+        },
+        {
+            "abstract": "",
+            "authors": [
+                "Qin, Yuhao ;Qiu, Zhike ;Chen, Zichong ;Cai, Rui"
+            ],
+            "categories": [
+                32
+            ],
+            "category_ids": "[32]",
+            "citation_count": 0,
+            "code_url": "",
+            "created_at": "2025-08-29 11:50:23",
+            "demo_url": "",
+            "doi": "",
+            "id": 18,
+            "journal": "PLOS ONE",
+            "order_index": 5,
+            "pdf_url": "https://www.scopus.com/pages/publications/105007350762",
+            "status": "published",
+            "title": "An effective approach for fault diagnosis: Conflict management and BBA generation",
+            "updated_at": "2025-09-07T17:09:13.820133",
+            "video_url": "",
+            "year": 2025
+        },
+        {
+            "abstract": "",
+            "authors": [
+                "Qiu, Zhike  ;Qin, Yuhao"
+            ],
+            "categories": [
+                32
+            ],
+            "category_ids": "[32]",
+            "citation_count": 0,
+            "code_url": "",
+            "created_at": "2025-08-29 11:50:23",
+            "demo_url": "",
+            "doi": "",
+            "id": 19,
+            "journal": "ACM International Conference Proceeding Series",
+            "order_index": 6,
+            "pdf_url": "https://www.scopus.com/pages/publications/85209112675",
+            "status": "published",
+            "title": "Hotspots and Current Status of Global Explainable Artificial Intelligence: A Bibliometric Analysis",
+            "updated_at": "2025-09-07T17:10:05.616030",
+            "video_url": "",
+            "year": 2024
+        },
+        {
+            "abstract": "",
+            "authors": [
+                "Yin, Zhixin ;Chen, Shanxiong ;Wang, Dingwang ;Peng, Xihua ;Zhou, Jun"
+            ],
+            "categories": [
+                27
+            ],
+            "category_ids": "[27]",
+            "citation_count": 0,
+            "code_url": "",
+            "created_at": "2025-09-08T17:53:25.790012",
+            "demo_url": "",
+            "doi": "",
+            "id": 29,
+            "journal": "18th International Conference on Frontiers in Handwriting Recognition (ICFHR)",
+            "order_index": 7,
+            "pdf_url": "https://link.springer.com/chapter/10.1007/978-3-031-21648-0_26",
+            "status": "published",
+            "title": "Yi Characters Online Handwriting Recognition Models Based on Recurrent Neural Network: RnnNet-Yi and ParallelRnnNet-Yi",
+            "updated_at": "2025-09-08T17:53:25.790012",
+            "video_url": "",
+            "year": 2022
+        }
+    ],
+    "frontend_papers": [
+        {
+            "abstract": "",
+            "authors": [
+                "Qin, Yuhao ;Zhang, Jinguo ;Qiu, Zhike ;Chen, Zichong ;Cai, Rui"
+            ],
+            "categories": [
+                32
+            ],
+            "category_ids": "[32]",
+            "category_names": [
+                "普刊"
+            ],
+            "citation_count": 0,
+            "code_url": "",
+            "created_at": "2025-08-29 11:50:23",
+            "demo_url": "",
+            "doi": "",
+            "id": 17,
+            "journal": "JOURNALOEKINGSAUDUNIVERSITV COMPUTERANDINFORMATIONSCIENCES",
+            "order_index": 2,
+            "pdf_url": "https://www.scopus.com/pages/publications/105007866049",
+            "status": "published",
+            "title": "Boosting complex evidence theory with complex belief Renyi divergence for multi-source information fusion",
+            "updated_at": "2025-09-07T17:04:59.687200",
+            "video_url": "",
+            "year": 2025
+        },
+        {
+            "abstract": "",
+            "authors": [
+                "Qiu, Zhike ;Qin, Yuhao ;Chen, Zichong ;Zeng, Luping ;Cai, Rui"
+            ],
+            "categories": [
+                32
+            ],
+            "category_ids": "[32]",
+            "category_names": [
+                "普刊"
+            ],
+            "citation_count": 0,
+            "code_url": "",
+            "created_at": "2025-08-29 11:50:23",
+            "demo_url": "",
+            "doi": "",
+            "id": 15,
+            "journal": "COMPLEX & INTELLIGENT SYSTEMS",
+            "order_index": 3,
+            "pdf_url": "https://www.scopus.com/pages/publications/105010597723",
+            "status": "published",
+            "title": "Overcoming negative weighting in uncertainty-based methods: a multi-uncertainty clustering method for evidence fusion",
+            "updated_at": "2025-09-07T17:06:25.962473",
+            "video_url": "",
+            "year": 2025
+        },
+        {
+            "abstract": "",
+            "authors": [
+                "Qiu, Zhike  ;Qin, Yuhao ;Zeng, Luping ;Wen, Liangming"
+            ],
+            "categories": [
+                32
+            ],
+            "category_ids": "[32]",
+            "category_names": [
+                "普刊"
+            ],
+            "citation_count": 0,
+            "code_url": "",
+            "created_at": "2025-08-29 11:50:23",
+            "demo_url": "",
+            "doi": "",
+            "id": 16,
+            "journal": "Lecture Notes in Computer Science",
+            "order_index": 4,
+            "pdf_url": "https://www.scopus.com/pages/publications/105012475216",
+            "status": "published",
+            "title": "MBFSNet: Multi-scale Binocular Fusion Semantic Co-occurrence Network for Multi-label Fundus Disease Diagnosis",
+            "updated_at": "2025-09-07T17:07:40.189503",
+            "video_url": "",
+            "year": 2025
+        }
+    ],
+    "algorithms": [
+        {
+            "author": null,
+            "category": "基础算法",
+            "code_preview": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31T15:11:45.440589",
+            "demo_url": null,
+            "description": "一种高效的排序算法，使用分治策略，平均时间复杂度为O(nlogn)",
+            "frontend_category": "competition",
+            "id": 293,
+            "order_index": 1,
+            "pdf_url": null,
+            "space_complexity": "O(logn)",
+            "status": "active",
+            "time_complexity": "O(nlogn)",
+            "title": "快速排序算法",
+            "updated_at": "2025-08-31T15:11:45.440589"
+        },
+        {
+            "author": null,
+            "category": "基础算法",
+            "code_preview": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:29:56",
+            "demo_url": null,
+            "description": "一种高效的排序算法，使用分治策略",
+            "frontend_category": "competition",
+            "id": 380,
+            "order_index": 1,
+            "pdf_url": null,
+            "space_complexity": "O(log n)",
+            "status": "active",
+            "time_complexity": "O(n log n)",
+            "title": "快速排序",
+            "updated_at": "2025-08-31 10:29:56"
+        },
+        {
+            "author": null,
+            "category": "基础算法",
+            "code_preview": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:29:56",
+            "demo_url": null,
+            "description": "一种高效的排序算法，使用分治策略",
+            "frontend_category": "competition",
+            "id": 383,
+            "order_index": 1,
+            "pdf_url": null,
+            "space_complexity": "O(log n)",
+            "status": "active",
+            "time_complexity": "O(n log n)",
+            "title": "快速排序",
+            "updated_at": "2025-08-31 10:29:56"
+        },
+        {
+            "author": null,
+            "category": "基础算法",
+            "code_preview": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:20:11",
+            "demo_url": null,
+            "description": "一种高效的排序算法，使用分治策略",
+            "frontend_category": "competition",
+            "id": 374,
+            "order_index": 1,
+            "pdf_url": null,
+            "space_complexity": "O(log n)",
+            "status": "active",
+            "time_complexity": "O(n log n)",
+            "title": "快速排序",
+            "updated_at": "2025-08-31 10:20:11"
+        },
+        {
+            "author": null,
+            "category": "基础算法",
+            "code_preview": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:20:11",
+            "demo_url": null,
+            "description": "一种高效的排序算法，使用分治策略",
+            "frontend_category": "competition",
+            "id": 377,
+            "order_index": 1,
+            "pdf_url": null,
+            "space_complexity": "O(log n)",
+            "status": "active",
+            "time_complexity": "O(n log n)",
+            "title": "快速排序",
+            "updated_at": "2025-08-31 10:20:11"
+        },
+        {
+            "author": null,
+            "category": "基础算法",
+            "code_preview": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:33:51",
+            "demo_url": null,
+            "description": "一种高效的排序算法，使用分治策略",
+            "frontend_category": "competition",
+            "id": 368,
+            "order_index": 1,
+            "pdf_url": null,
+            "space_complexity": "O(log n)",
+            "status": "active",
+            "time_complexity": "O(n log n)",
+            "title": "快速排序",
+            "updated_at": "2025-08-31 09:33:51"
+        },
+        {
+            "author": null,
+            "category": "基础算法",
+            "code_preview": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:33:51",
+            "demo_url": null,
+            "description": "一种高效的排序算法，使用分治策略",
+            "frontend_category": "competition",
+            "id": 371,
+            "order_index": 1,
+            "pdf_url": null,
+            "space_complexity": "O(log n)",
+            "status": "active",
+            "time_complexity": "O(n log n)",
+            "title": "快速排序",
+            "updated_at": "2025-08-31 09:33:51"
+        },
+        {
+            "author": null,
+            "category": "基础算法",
+            "code_preview": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:28:16",
+            "demo_url": null,
+            "description": "一种高效的排序算法，使用分治策略",
+            "frontend_category": "competition",
+            "id": 362,
+            "order_index": 1,
+            "pdf_url": null,
+            "space_complexity": "O(log n)",
+            "status": "active",
+            "time_complexity": "O(n log n)",
+            "title": "快速排序",
+            "updated_at": "2025-08-31 09:28:16"
+        },
+        {
+            "author": null,
+            "category": "基础算法",
+            "code_preview": "def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:28:16",
+            "demo_url": null,
+            "description": "一种高效的排序算法，使用分治策略",
+            "frontend_category": "competition",
+            "id": 365,
+            "order_index": 1,
+            "pdf_url": null,
+            "space_complexity": "O(log n)",
+            "status": "active",
+            "time_complexity": "O(n log n)",
+            "title": "快速排序",
+            "updated_at": "2025-08-31 09:28:16"
+        },
+        {
+            "author": null,
+            "category": "动态规划",
+            "code_preview": "def knapsack(values, weights, W):\n    n = len(values)\n    dp = [[0] * (W + 1) for _ in range(n + 1)]\n    for i in range(1, n + 1):\n        for w in range(W + 1):\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weights[i-1]] + values[i-1])\n            else:\n                dp[i][w] = dp[i-1][w]\n    return dp[n][W]",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31T15:11:45.440589",
+            "demo_url": null,
+            "description": "经典的0-1背包问题解决方案，通过构建最优子结构来解决问题",
+            "frontend_category": "competition",
+            "id": 294,
+            "order_index": 2,
+            "pdf_url": null,
+            "space_complexity": "O(nW)",
+            "status": "active",
+            "time_complexity": "O(nW)",
+            "title": "动态规划 - 背包问题",
+            "updated_at": "2025-08-31T15:11:45.440589"
+        },
+        {
+            "author": null,
+            "category": "动态规划",
+            "code_preview": "def knapsack(values, weights, W):\n    n = len(values)\n    dp = [[0] * (W + 1) for _ in range(n + 1)]\n    for i in range(1, n + 1):\n        for w in range(W + 1):\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weights[i-1]] + values[i-1])\n            else:\n                dp[i][w] = dp[i-1][w]\n    return dp[n][W]",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:29:56",
+            "demo_url": null,
+            "description": "经典的0-1背包问题解决方案",
+            "frontend_category": "competition",
+            "id": 381,
+            "order_index": 2,
+            "pdf_url": null,
+            "space_complexity": "O(nW)",
+            "status": "active",
+            "time_complexity": "O(nW)",
+            "title": "动态规划 - 背包问题",
+            "updated_at": "2025-08-31 10:29:56"
+        },
+        {
+            "author": null,
+            "category": "动态规划",
+            "code_preview": "def knapsack(values, weights, W):\n    n = len(values)\n    dp = [[0] * (W + 1) for _ in range(n + 1)]\n    for i in range(1, n + 1):\n        for w in range(W + 1):\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weights[i-1]] + values[i-1])\n            else:\n                dp[i][w] = dp[i-1][w]\n    return dp[n][W]",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:29:56",
+            "demo_url": null,
+            "description": "经典的0-1背包问题解决方案",
+            "frontend_category": "competition",
+            "id": 384,
+            "order_index": 2,
+            "pdf_url": null,
+            "space_complexity": "O(nW)",
+            "status": "active",
+            "time_complexity": "O(nW)",
+            "title": "动态规划 - 背包问题",
+            "updated_at": "2025-08-31 10:29:56"
+        },
+        {
+            "author": null,
+            "category": "动态规划",
+            "code_preview": "def knapsack(values, weights, W):\n    n = len(values)\n    dp = [[0] * (W + 1) for _ in range(n + 1)]\n    for i in range(1, n + 1):\n        for w in range(W + 1):\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weights[i-1]] + values[i-1])\n            else:\n                dp[i][w] = dp[i-1][w]\n    return dp[n][W]",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:20:11",
+            "demo_url": null,
+            "description": "经典的0-1背包问题解决方案",
+            "frontend_category": "competition",
+            "id": 375,
+            "order_index": 2,
+            "pdf_url": null,
+            "space_complexity": "O(nW)",
+            "status": "active",
+            "time_complexity": "O(nW)",
+            "title": "动态规划 - 背包问题",
+            "updated_at": "2025-08-31 10:20:11"
+        },
+        {
+            "author": null,
+            "category": "动态规划",
+            "code_preview": "def knapsack(values, weights, W):\n    n = len(values)\n    dp = [[0] * (W + 1) for _ in range(n + 1)]\n    for i in range(1, n + 1):\n        for w in range(W + 1):\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weights[i-1]] + values[i-1])\n            else:\n                dp[i][w] = dp[i-1][w]\n    return dp[n][W]",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:20:11",
+            "demo_url": null,
+            "description": "经典的0-1背包问题解决方案",
+            "frontend_category": "competition",
+            "id": 378,
+            "order_index": 2,
+            "pdf_url": null,
+            "space_complexity": "O(nW)",
+            "status": "active",
+            "time_complexity": "O(nW)",
+            "title": "动态规划 - 背包问题",
+            "updated_at": "2025-08-31 10:20:11"
+        },
+        {
+            "author": null,
+            "category": "动态规划",
+            "code_preview": "def knapsack(values, weights, W):\n    n = len(values)\n    dp = [[0] * (W + 1) for _ in range(n + 1)]\n    for i in range(1, n + 1):\n        for w in range(W + 1):\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weights[i-1]] + values[i-1])\n            else:\n                dp[i][w] = dp[i-1][w]\n    return dp[n][W]",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:33:51",
+            "demo_url": null,
+            "description": "经典的0-1背包问题解决方案",
+            "frontend_category": "competition",
+            "id": 369,
+            "order_index": 2,
+            "pdf_url": null,
+            "space_complexity": "O(nW)",
+            "status": "active",
+            "time_complexity": "O(nW)",
+            "title": "动态规划 - 背包问题",
+            "updated_at": "2025-08-31 09:33:51"
+        },
+        {
+            "author": null,
+            "category": "动态规划",
+            "code_preview": "def knapsack(values, weights, W):\n    n = len(values)\n    dp = [[0] * (W + 1) for _ in range(n + 1)]\n    for i in range(1, n + 1):\n        for w in range(W + 1):\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weights[i-1]] + values[i-1])\n            else:\n                dp[i][w] = dp[i-1][w]\n    return dp[n][W]",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:33:51",
+            "demo_url": null,
+            "description": "经典的0-1背包问题解决方案",
+            "frontend_category": "competition",
+            "id": 372,
+            "order_index": 2,
+            "pdf_url": null,
+            "space_complexity": "O(nW)",
+            "status": "active",
+            "time_complexity": "O(nW)",
+            "title": "动态规划 - 背包问题",
+            "updated_at": "2025-08-31 09:33:51"
+        },
+        {
+            "author": null,
+            "category": "动态规划",
+            "code_preview": "def knapsack(values, weights, W):\n    n = len(values)\n    dp = [[0] * (W + 1) for _ in range(n + 1)]\n    for i in range(1, n + 1):\n        for w in range(W + 1):\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weights[i-1]] + values[i-1])\n            else:\n                dp[i][w] = dp[i-1][w]\n    return dp[n][W]",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:28:16",
+            "demo_url": null,
+            "description": "经典的0-1背包问题解决方案",
+            "frontend_category": "competition",
+            "id": 363,
+            "order_index": 2,
+            "pdf_url": null,
+            "space_complexity": "O(nW)",
+            "status": "active",
+            "time_complexity": "O(nW)",
+            "title": "动态规划 - 背包问题",
+            "updated_at": "2025-08-31 09:28:16"
+        },
+        {
+            "author": null,
+            "category": "动态规划",
+            "code_preview": "def knapsack(values, weights, W):\n    n = len(values)\n    dp = [[0] * (W + 1) for _ in range(n + 1)]\n    for i in range(1, n + 1):\n        for w in range(W + 1):\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weights[i-1]] + values[i-1])\n            else:\n                dp[i][w] = dp[i-1][w]\n    return dp[n][W]",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:28:16",
+            "demo_url": null,
+            "description": "经典的0-1背包问题解决方案",
+            "frontend_category": "competition",
+            "id": 366,
+            "order_index": 2,
+            "pdf_url": null,
+            "space_complexity": "O(nW)",
+            "status": "active",
+            "time_complexity": "O(nW)",
+            "title": "动态规划 - 背包问题",
+            "updated_at": "2025-08-31 09:28:16"
+        },
+        {
+            "author": null,
+            "category": "数据结构",
+            "code_preview": "class TreeNode:\n    def __init__(self, val=0):\n        self.val = val\n        self.left = None\n        self.right = None\n\ndef inorder_traversal(root):\n    if root:\n        inorder_traversal(root.left)\n        print(root.val)\n        inorder_traversal(root.right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:29:56",
+            "demo_url": null,
+            "description": "二叉树的前序、中序、后序遍历",
+            "frontend_category": "data-structures",
+            "id": 382,
+            "order_index": 3,
+            "pdf_url": null,
+            "space_complexity": "O(h)",
+            "status": "active",
+            "time_complexity": "O(n)",
+            "title": "二叉树遍历",
+            "updated_at": "2025-08-31 10:29:56"
+        },
+        {
+            "author": null,
+            "category": "数据结构",
+            "code_preview": "class TreeNode:\n    def __init__(self, val=0):\n        self.val = val\n        self.left = None\n        self.right = None\n\ndef inorder_traversal(root):\n    if root:\n        inorder_traversal(root.left)\n        print(root.val)\n        inorder_traversal(root.right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:29:56",
+            "demo_url": null,
+            "description": "二叉树的前序、中序、后序遍历",
+            "frontend_category": "data-structures",
+            "id": 385,
+            "order_index": 3,
+            "pdf_url": null,
+            "space_complexity": "O(h)",
+            "status": "active",
+            "time_complexity": "O(n)",
+            "title": "二叉树遍历",
+            "updated_at": "2025-08-31 10:29:56"
+        },
+        {
+            "author": null,
+            "category": "数据结构",
+            "code_preview": "class TreeNode:\n    def __init__(self, val=0):\n        self.val = val\n        self.left = None\n        self.right = None\n\ndef inorder_traversal(root):\n    if root:\n        inorder_traversal(root.left)\n        print(root.val)\n        inorder_traversal(root.right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:20:11",
+            "demo_url": null,
+            "description": "二叉树的前序、中序、后序遍历",
+            "frontend_category": "data-structures",
+            "id": 376,
+            "order_index": 3,
+            "pdf_url": null,
+            "space_complexity": "O(h)",
+            "status": "active",
+            "time_complexity": "O(n)",
+            "title": "二叉树遍历",
+            "updated_at": "2025-08-31 10:20:11"
+        },
+        {
+            "author": null,
+            "category": "数据结构",
+            "code_preview": "class TreeNode:\n    def __init__(self, val=0):\n        self.val = val\n        self.left = None\n        self.right = None\n\ndef inorder_traversal(root):\n    if root:\n        inorder_traversal(root.left)\n        print(root.val)\n        inorder_traversal(root.right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 10:20:11",
+            "demo_url": null,
+            "description": "二叉树的前序、中序、后序遍历",
+            "frontend_category": "data-structures",
+            "id": 379,
+            "order_index": 3,
+            "pdf_url": null,
+            "space_complexity": "O(h)",
+            "status": "active",
+            "time_complexity": "O(n)",
+            "title": "二叉树遍历",
+            "updated_at": "2025-08-31 10:20:11"
+        },
+        {
+            "author": null,
+            "category": "数据结构",
+            "code_preview": "class TreeNode:\n    def __init__(self, val=0):\n        self.val = val\n        self.left = None\n        self.right = None\n\ndef inorder_traversal(root):\n    if root:\n        inorder_traversal(root.left)\n        print(root.val)\n        inorder_traversal(root.right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:33:51",
+            "demo_url": null,
+            "description": "二叉树的前序、中序、后序遍历",
+            "frontend_category": "data-structures",
+            "id": 370,
+            "order_index": 3,
+            "pdf_url": null,
+            "space_complexity": "O(h)",
+            "status": "active",
+            "time_complexity": "O(n)",
+            "title": "二叉树遍历",
+            "updated_at": "2025-08-31 09:33:51"
+        },
+        {
+            "author": null,
+            "category": "数据结构",
+            "code_preview": "class TreeNode:\n    def __init__(self, val=0):\n        self.val = val\n        self.left = None\n        self.right = None\n\ndef inorder_traversal(root):\n    if root:\n        inorder_traversal(root.left)\n        print(root.val)\n        inorder_traversal(root.right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:33:51",
+            "demo_url": null,
+            "description": "二叉树的前序、中序、后序遍历",
+            "frontend_category": "data-structures",
+            "id": 373,
+            "order_index": 3,
+            "pdf_url": null,
+            "space_complexity": "O(h)",
+            "status": "active",
+            "time_complexity": "O(n)",
+            "title": "二叉树遍历",
+            "updated_at": "2025-08-31 09:33:51"
+        },
+        {
+            "author": null,
+            "category": "数据结构",
+            "code_preview": "class TreeNode:\n    def __init__(self, val=0):\n        self.val = val\n        self.left = None\n        self.right = None\n\ndef inorder_traversal(root):\n    if root:\n        inorder_traversal(root.left)\n        print(root.val)\n        inorder_traversal(root.right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:28:16",
+            "demo_url": null,
+            "description": "二叉树的前序、中序、后序遍历",
+            "frontend_category": "data-structures",
+            "id": 364,
+            "order_index": 3,
+            "pdf_url": null,
+            "space_complexity": "O(h)",
+            "status": "active",
+            "time_complexity": "O(n)",
+            "title": "二叉树遍历",
+            "updated_at": "2025-08-31 09:28:16"
+        },
+        {
+            "author": null,
+            "category": "数据结构",
+            "code_preview": "class TreeNode:\n    def __init__(self, val=0):\n        self.val = val\n        self.left = None\n        self.right = None\n\ndef inorder_traversal(root):\n    if root:\n        inorder_traversal(root.left)\n        print(root.val)\n        inorder_traversal(root.right)",
+            "code_url": null,
+            "complexity": null,
+            "created_at": "2025-08-31 09:28:16",
+            "demo_url": null,
+            "description": "二叉树的前序、中序、后序遍历",
+            "frontend_category": "data-structures",
+            "id": 367,
+            "order_index": 3,
+            "pdf_url": null,
+            "space_complexity": "O(h)",
+            "status": "active",
+            "time_complexity": "O(n)",
+            "title": "二叉树遍历",
+            "updated_at": "2025-08-31 09:28:16"
+        }
+    ],
+    "algorithm_awards": [
+        {
+            "award_level": "三等奖",
+            "competition_date": "2025-04-12",
+            "competition_location": "重庆",
+            "competition_name": "第十六届蓝桥杯全国软件和信息技术专 业人才大赛全国总决赛C/C++程序设计大学A组",
+            "created_at": "2025-09-06T14:13:23.245382",
+            "description": "",
+            "id": 421,
+            "image_url": "",
+            "order_index": 0,
+            "status": "active",
+            "team_score": "",
+            "title": "2025年蓝桥杯国级三等奖",
+            "updated_at": "2025-09-06T14:35:57.660864",
+            "winner_name": "李雨璐"
+        },
+        {
+            "award_level": "三等奖",
+            "competition_date": "2025-06-22",
+            "competition_location": "重庆",
+            "competition_name": "第十六届蓝桥杯全国软件和信息技术专 业人才大赛全国总决赛C/C++程序设计大学A组",
+            "created_at": "2025-09-06T14:18:14.926545",
+            "description": "",
+            "id": 424,
+            "image_url": "",
+            "order_index": 1,
+            "status": "active",
+            "team_score": "",
+            "title": "2025年蓝桥杯国级三等奖",
+            "updated_at": "2025-09-06T14:18:14.926545",
+            "winner_name": "杨雅媚"
+        },
+        {
+            "award_level": "一等奖",
+            "competition_date": "2025-04-12",
+            "competition_location": "重庆",
+            "competition_name": "第十六届蓝桥杯全国软件和信息技术 专业人才大赛重庆赛区C/C++程序设计大学A组",
+            "created_at": "2025-09-06T14:19:36.380389",
+            "description": "",
+            "id": 425,
+            "image_url": "",
+            "order_index": 2,
+            "status": "active",
+            "team_score": "",
+            "title": "2025年蓝桥杯省级一等奖",
+            "updated_at": "2025-09-06T14:19:36.380389",
+            "winner_name": "刘佳豪"
+        },
+        {
+            "award_level": "二等奖",
+            "competition_date": "2025-04-12",
+            "competition_location": "重庆",
+            "competition_name": "第十六届蓝桥杯全国软件和信息技术 专业人才大赛重庆赛区C/C++程序设计大学A组",
+            "created_at": "2025-09-06T14:10:19.938261",
+            "description": "比赛地点：西南大学北碚校区",
+            "id": 420,
+            "image_url": "https://imgur.la/images/2025/09/06/_1601010622.jpg",
+            "order_index": 3,
+            "status": "active",
+            "team_score": "",
+            "title": "2025年蓝桥杯省二等奖",
+            "updated_at": "2025-09-06T14:11:01.050606",
+            "winner_name": "余子烨"
+        },
+        {
+            "award_level": "二等奖",
+            "competition_date": "2025-04-12",
+            "competition_location": "重庆",
+            "competition_name": "第十六届蓝桥杯全国软件和信息技术 专业人才大赛重庆赛区C/C++程序设计大学A组",
+            "created_at": "2025-09-06T14:14:39.275935",
+            "description": "",
+            "id": 422,
+            "image_url": "",
+            "order_index": 4,
+            "status": "active",
+            "team_score": "",
+            "title": "2025年蓝桥杯省级二等奖",
+            "updated_at": "2025-09-06T14:14:39.275935",
+            "winner_name": "柳晓洲"
+        },
+        {
+            "award_level": "三等奖",
+            "competition_date": "2025-04-12",
+            "competition_location": "重庆",
+            "competition_name": "第十六届蓝桥杯全国软件和信息技术 专业人才大赛重庆赛区C/C++程序设计大学A组",
+            "created_at": "2025-09-06T14:04:32.459279",
+            "description": "比赛地点：西南大学北碚校区",
+            "id": 419,
+            "image_url": "file:///D:/Users/daibi/Downloads/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%88%90%E6%9E%9C/24-25%E5%AD%A6%E5%B9%B4/%E8%93%9D%E6%A1%A5%E6%9D%AF/%E6%9B%BE%E8%B7%AF%E5%B9%B3_1601010591.jpg",
+            "order_index": 5,
+            "status": "active",
+            "team_score": "",
+            "title": "2025年蓝桥杯省三等奖",
+            "updated_at": "2025-09-06T14:05:04.295152",
+            "winner_name": "曾路平"
+        },
+        {
+            "award_level": "三等奖",
+            "competition_date": "2025-04-12",
+            "competition_location": "重庆",
+            "competition_name": "第十六届蓝桥杯全国软件和信息技术 专业人才大赛重庆赛区C/C++程序设计大学A组",
+            "created_at": "2025-09-06T14:16:25.604341",
+            "description": "",
+            "id": 423,
+            "image_url": "",
+            "order_index": 6,
+            "status": "active",
+            "team_score": "",
+            "title": "2025年蓝桥杯省级三等奖",
+            "updated_at": "2025-09-06T14:16:25.604341",
+            "winner_name": "胡家辉"
+        },
+        {
+            "award_level": "三等奖",
+            "competition_date": "2025-05-06",
+            "competition_location": "重庆",
+            "competition_name": "2025 团体程序设计天梯赛",
+            "created_at": "2025-09-06T14:23:03.268965",
+            "description": "",
+            "id": 426,
+            "image_url": "",
+            "order_index": 7,
+            "status": "active",
+            "team_score": "",
+            "title": "2025年天梯赛个人三等奖",
+            "updated_at": "2025-09-06T14:23:03.268965",
+            "winner_name": "李雨璐"
+        },
+        {
+            "award_level": "二等奖",
+            "competition_date": "2025-05-10",
+            "competition_location": "重庆",
+            "competition_name": "2025年重庆市第十三届大学生程序设计大赛",
+            "created_at": "2025-09-06T14:31:27.459424",
+            "description": "",
+            "id": 431,
+            "image_url": "",
+            "order_index": 8,
+            "status": "active",
+            "team_score": "",
+            "title": "2025重庆市程序设计大赛银奖",
+            "updated_at": "2025-09-06T14:33:47.162941",
+            "winner_name": "肖衍南、张浩博、胡家辉"
+        },
+        {
+            "award_level": "三等奖",
+            "competition_date": "2025-05-10",
+            "competition_location": "重庆",
+            "competition_name": "2025年重庆市第十三届大学生程序设计大赛",
+            "created_at": "2025-09-06T14:28:51.946673",
+            "description": "",
+            "id": 429,
+            "image_url": "",
+            "order_index": 9,
+            "status": "active",
+            "team_score": "",
+            "title": "2025重庆市程序设计大赛铜奖",
+            "updated_at": "2025-09-06T14:33:33.170976",
+            "winner_name": "曾路平、刘佳豪、余子烨"
+        },
+        {
+            "award_level": "二等奖",
+            "competition_date": "2025-05-10",
+            "competition_location": "重庆",
+            "competition_name": "2025年重庆市第十三届大学生程序设计大赛",
+            "created_at": "2025-09-06T14:30:23.626994",
+            "description": "",
+            "id": 430,
+            "image_url": "",
+            "order_index": 10,
+            "status": "active",
+            "team_score": "",
+            "title": "2025重庆市程序设计大赛银奖",
+            "updated_at": "2025-09-06T14:33:40.629482",
+            "winner_name": "李雨璐、柳晓洲、代冰洋"
+        },
+        {
+            "award_level": "二等奖",
+            "competition_date": "2025-05-06",
+            "competition_location": "重庆",
+            "competition_name": "2025 团体程序设计天梯赛",
+            "created_at": "2025-09-06T14:33:18.735786",
+            "description": "",
+            "id": 432,
+            "image_url": "",
+            "order_index": 11,
+            "status": "active",
+            "team_score": "",
+            "title": "2025天梯赛二等奖",
+            "updated_at": "2025-09-06T14:33:18.735786",
+            "winner_name": "李雨璐 肖衍南 胡家辉 余子烨 柳晓洲 张浩博 刘佳豪 代冰洋 曾路平 邱智柯"
+        },
+        {
+            "award_level": "二等奖",
+            "competition_date": "2025-04-30",
+            "competition_location": "重庆",
+            "competition_name": "2024 团体程序设计天梯赛",
+            "created_at": "2025-09-06T14:25:09.445548",
+            "description": "",
+            "id": 427,
+            "image_url": "",
+            "order_index": 12,
+            "status": "active",
+            "team_score": "",
+            "title": "2024团体天梯赛二等奖",
+            "updated_at": "2025-09-06T14:25:09.445548",
+            "winner_name": "杨潇 孙祺炜 杨雅媚 李雨璐 曾路平 邱智柯 陈龙刚 李卓燕 吴悠 罗晓龙"
+        },
+        {
+            "award_level": "三等奖",
+            "competition_date": "2024-04-12",
+            "competition_location": "重庆",
+            "competition_name": "第十五届蓝桥杯全国软件和信息技术 专业人才大赛重庆赛区C/C++程序设计研究生组",
+            "created_at": "2025-09-06T14:26:59.608678",
+            "description": "",
+            "id": 428,
+            "image_url": "",
+            "order_index": 13,
+            "status": "active",
+            "team_score": "",
+            "title": "2024蓝桥杯省三等奖",
+            "updated_at": "2025-09-06T14:26:59.608678",
+            "winner_name": "曾路平"
+        }
+    ],
+    "innovation_projects": [
+        {
+            "category": "省级创新创业项目",
+            "created_at": "2025-08-31T15:39:29.799013",
+            "description": "提供高效易用的编程评测解决方案，以微服务 + Docker 保障稳定、一键部署降门槛，配创新负载均衡提效率、知识图谱推荐强针对性，已完成部署与文档，后续将托管大数据平台拓展能力。",
+            "detail_url": "",
+            "id": 1,
+            "image_url": "./uploads/innovation_projects/project_30823f5b23ca5dc5.png",
+            "sort_order": 1,
+            "status": "active",
+            "tags": "Docker容器化技术，Docker容器化技术，负载均衡算法，微服务架构，熔断机制",
+            "title": "SLOJ：大数据智能测评及推荐系统",
+            "updated_at": "2025-09-09T13:29:16.572037"
+        },
+        {
+            "category": "校级创新创业项目",
+            "created_at": "2025-08-31T15:39:29.799013",
+            "description": "本项目旨在实现高精度多标签眼底疾病识别，提出多尺度双目融合语义共现网络（MBFSNet），融合双目多尺度特征并建模疾病语义关系，在相关数据集表现优异。还构建眼底图像智能诊断平台 EyeFusion，集成图像预处理增强、可视化及多项辅助功能，辅助医生筛查疾病，兼具理论与应用价值。",
+            "detail_url": "https://github.com/acm-lab/cv-platform",
+            "id": 4,
+            "image_url": "./uploads/innovation_projects/project_ef94534c480295ad.png",
+            "sort_order": 2,
+            "status": "active",
+            "tags": "多尺度双目融合语义共现网络（MBFSNet）、眼底图像智能诊断平台（EyeFusion）、高分辨率网络（HRNet）、Grad - CAM",
+            "title": "多尺度双目融合语义共现网络与眼底图像智能诊断平台（EyeFusion）",
+            "updated_at": "2025-09-09T13:23:37.431220"
+        }
+    ],
+    "advisors": [
+        {
+            "border_color": "primary",
+            "created_at": "2025-09-01T10:11:20.303983",
+            "description": "信息资源管理、信息安全、人工智能在MIS中的应用",
+            "email": "duzhiguo@swu.edu.cn",
+            "github": "",
+            "google_scholar": "",
+            "id": 11,
+            "image_url": "https://smxy.swu.edu.cn/__local/F/4F/28/461828E59397448E94428A08476_937D183E_A147.png",
+            "name": "杜治国",
+            "position": "硕士，副教授",
+            "sort_order": 5,
+            "status": "active",
+            "updated_at": "2025-09-05T19:15:05.554484"
+        }
+    ],
+    "activities": [
+        {
+            "author": "ACM算法研究实验室",
+            "category": "竞赛分享",
+            "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">重庆市第十三届大学生程序设计大赛</a></h1> <p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p> <p>在此次大赛中，我室共三支队伍参赛并取得佳绩。",
+            "formatted_date": "2025-09-05 21:39:55.883109",
+            "id": 20,
+            "publish_date": "2025-09-05 21:39:55.883109",
+            "reading_time": 1,
+            "tags": "",
+            "title": "2025年5月10日 我室成员在重庆市第十三届大学生程序设计大赛中斩获两银一铜的优异成绩"
+        },
+        {
+            "author": "ACM算法研究实验室",
+            "category": "竞赛分享",
+            "excerpt": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。 这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。",
+            "formatted_date": "2025-09-05 21:20:11.948774",
+            "id": 19,
+            "publish_date": "2025-09-05 21:20:11.948774",
+            "reading_time": 3,
+            "tags": "",
+            "title": "2025年4月12日 实验室23级和24级的成员参加蓝桥杯取得7项省奖一项国奖的优异成绩"
+        },
+        {
+            "author": "ACM算法研究实验室",
+            "category": "竞赛分享",
+            "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">天梯赛团体二等奖</a></h1> <p>2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。</p> <p>经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。",
+            "formatted_date": "2025-09-01 10:36:26.565869",
+            "id": 18,
+            "publish_date": "2025-09-01 10:36:26.565869",
+            "reading_time": 1,
+            "tags": "天梯赛",
+            "title": "2025年4月19日 实验室23级24级以及22级参与团体天梯赛取得省级二等奖的优异成绩"
+        }
+    ],
+    "innovation_stats": [
+        {
+            "created_at": "2025-08-31 05:46:17",
+            "description": "2024以来我室成员在核心期刊发表学术论文，网页仅展示部分",
+            "icon": "fa-file-text-o",
+            "id": 3,
+            "name": "发表论文",
+            "sort_order": 0,
+            "status": "active",
+            "updated_at": "2025-09-09 13:52:35.411946",
+            "value": 12
+        },
+        {
+            "created_at": "2025-08-31 05:46:17",
+            "description": "2024年以来，我室成员在各类比赛中获得奖项，数学建模，全国大学生数学竞赛，信息素养大赛，商道双创之物流设计大赛，商贸学院文化创意大赛，中国大学生创新创业大赛，服务外包大赛，中国机器人及人工智能大赛等（网页中未展现全部比赛 主展示科创）",
+            "icon": "fa-trophy",
+            "id": 4,
+            "name": "获得奖项",
+            "sort_order": 2,
+            "status": "active",
+            "updated_at": "2025-09-09 13:51:44.399757",
+            "value": 10
+        }
+    ],
+    "innovation_carousel": [
+        {
+            "created_at": "2025-08-31 05:46:17",
+            "description": "提供高效易用的编程评测解决方案，以微服务 + Docker 保障稳定、一键部署降门槛，配创新负载均衡提效率、知识图谱推荐强针对性，已完成部署与文档，后续将托管大数据平台拓展能力。​",
+            "id": 1,
+            "image_display_url": "./uploads/carousel/carousel_20250908_171726_3ed06967.png",
+            "image_file": null,
+            "image_url": "./uploads/carousel/carousel_20250908_171726_3ed06967.png",
+            "link_url": "",
+            "overlay_opacity": 0.3,
+            "sort_order": 0,
+            "status": "active",
+            "text_position": "bottom-left",
+            "title": "大数据智能测评及推荐系统",
+            "updated_at": "2025-09-08 17:18:30.174571"
+        },
+        {
+            "created_at": "2025-09-09 13:25:04.256870",
+            "description": "本项目旨在实现高精度多标签眼底疾病识别，提出多尺度双目融合语义共现网络（MBFSNet），融合双目多尺度特征并建模疾病语义关系，在相关数据集表现优异。还构建眼底图像智能诊断平台 EyeFusion，集成图像预处理增强、可视化及多项辅助功能，辅助医生筛查疾病，兼具理论与应用价值。",
+            "id": 4,
+            "image_display_url": "./uploads/carousel/carousel_20250909_132500_02c64e1b.png",
+            "image_file": null,
+            "image_url": "./uploads/carousel/carousel_20250909_132500_02c64e1b.png",
+            "link_url": "",
+            "overlay_opacity": 0.3,
+            "sort_order": 1,
+            "status": "active",
+            "text_position": "bottom-left",
+            "title": "多尺度双目融合语义共现网络与眼底图像智能诊断平台（EyeFusion）",
+            "updated_at": "2025-09-09 13:25:04.256870"
+        }
+    ],
+    "achievements": [
+        {
+            "created_at": "2025-09-09 07:40:21.668377",
+            "date": "2025-08-21",
+            "description": "我室成员曾路平、张浩博、邱智柯在第二十七届中国机器人及人工智能大赛全国总决赛中，西南大学代表队表现优异、成绩突出，荣获人工智能创新赛三等奖",
+            "extra_data": null,
+            "icon": "",
+            "id": 5,
+            "sort_order": 1,
+            "status": "active",
+            "title": "第二十七届中国机器人及人工智能大赛全国总决赛 三等奖",
+            "type": "award",
+            "updated_at": "2025-09-09 07:40:21.668377"
+        },
+        {
+            "created_at": "2025-09-09 14:34:14.241590",
+            "date": "2025-06-09",
+            "description": "我室成员的市级项目顺利通过结题",
+            "extra_data": null,
+            "icon": "",
+            "id": 6,
+            "sort_order": 2,
+            "status": "active",
+            "title": "大学生创新创业训练计划 项目结题证书",
+            "type": "award",
+            "updated_at": "2025-09-09 14:34:14.241590"
+        }
+    ],
+    "training_projects": [
+        {
+            "budget": null,
+            "category": "人工智能",
+            "contact_email": null,
+            "contact_phone": null,
+            "contact_wechat": null,
+            "created_at": "2025-09-10 10:20:00",
+            "description": "基于深度学习的智能视觉分析系统开发",
+            "end_date": null,
+            "id": 13,
+            "image_display_url": null,
+            "image_file": null,
+            "image_url": null,
+            "leader": "李教授",
+            "members_count": 0,
+            "progress": 85,
+            "sort_order": 1,
+            "start_date": null,
+            "status": "active",
+            "title": "智能视觉分析系统",
+            "updated_at": "2025-09-10 10:20:00"
+        },
+        {
+            "budget": null,
+            "category": "大数据",
+            "contact_email": null,
+            "contact_phone": null,
+            "contact_wechat": null,
+            "created_at": "2025-09-10 10:20:00",
+            "description": "企业级大数据分析平台设计与实现",
+            "end_date": null,
+            "id": 14,
+            "image_display_url": null,
+            "image_file": null,
+            "image_url": null,
+            "leader": "王教授",
+            "members_count": 0,
+            "progress": 70,
+            "sort_order": 2,
+            "start_date": null,
+            "status": "active",
+            "title": "大数据分析平台",
+            "updated_at": "2025-09-10 10:20:00"
+        }
+    ],
+    "intellectual_properties": [
+        {
+            "application_date": "2024-01-15",
+            "category": "应用软件",
+            "created_at": "2025-09-09 13:44:49.046513",
+            "description": "本软著对应基于云平台的大数据技能智能测评系统，旨在解决智能评测中代码安全、多机器性能差异导致的时间衡量不准、高 I/O 开销等问题，保障评测结果准确、过程高效、运行稳定。系统采用微服务框架开发，借助 Docker 容器沙盒特性构建完善评测系统，打造具备稳定性的分布式架构，支持团队管理功能，采用新技术实现各类功能，并可通过 Docker Compose 一键部署。",
+            "grant_date": "2025-05-22",
+            "id": 16,
+            "image_display_url": "./uploads/intellectual_properties/intellectual_properties_20250909_133855_ad42aebb.png",
+            "image_file": null,
+            "image_url": "./uploads/intellectual_properties/intellectual_properties_20250909_133855_ad42aebb.png",
+            "inventors": "罗晓龙，李卓燕，杨雅媚，吴悠",
+            "patent_number": "",
+            "sort_order": 0,
+            "status": "active",
+            "title": "Alioth 在线代码评测系统",
+            "type": "patent",
+            "updated_at": "2025-09-09 13:44:55.845515"
+        },
+        {
+            "application_date": "2024-01-15",
+            "category": "应用软件",
+            "created_at": "2025-08-31 15:16:49",
+            "description": "该系统可实现多种文档格式间的高效转换，为用户在文档处理与格式兼容方面提供了便利，助力提升文档管理与使用的效率。",
+            "grant_date": "2025-05-21",
+            "id": 5,
+            "image_display_url": "./uploads/intellectual_properties/intellectual_properties_20250909_143526_f2ce80bc",
+            "image_file": null,
+            "image_url": "./uploads/intellectual_properties/intellectual_properties_20250909_143526_f2ce80bc",
+            "inventors": "曾路平",
+            "patent_number": "",
+            "sort_order": 1,
+            "status": "active",
+            "title": "多格式文档转换系统 V1.0",
+            "type": "copyright",
+            "updated_at": "2025-09-09 14:35:28.737002"
+        }
+    ],
+    "enterprise_cooperations": [
+        {
+            "achievement": null,
+            "budget": null,
+            "category": "技术研发",
+            "created_at": "2025-09-10 10:20:00",
+            "description": "为华为提供AI算法优化和芯片适配服务",
+            "end_date": null,
+            "enterprise_logo": null,
+            "enterprise_name": "华为技术",
+            "id": 20,
+            "image_display_url": null,
+            "image_file": null,
+            "image_url": null,
+            "leader": "陈教授",
+            "sort_order": 1,
+            "start_date": null,
+            "status": "active",
+            "title": "AI算法优化与芯片适配",
+            "updated_at": "2025-09-10 10:20:00"
+        },
+        {
+            "achievement": null,
+            "budget": null,
+            "category": "软件开发",
+            "created_at": "2025-09-10 10:20:00",
+            "description": "为腾讯开发企业级大数据分析平台",
+            "end_date": null,
+            "enterprise_logo": null,
+            "enterprise_name": "腾讯科技",
+            "id": 21,
+            "image_display_url": null,
+            "image_file": null,
+            "image_url": null,
+            "leader": "刘教授",
+            "sort_order": 2,
+            "start_date": null,
+            "status": "active",
+            "title": "大数据分析平台开发",
+            "updated_at": "2025-09-10 10:20:00"
+        }
+    ],
+    "notification_details": {
+        "20": {
+            "id": 20,
+            "title": "2025年5月10日 我室成员在重庆市第十三届大学生程序设计大赛中斩获两银一铜的优异成绩",
+            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">重庆市第十三届大学生程序设计大赛</a></h1>\n<p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p>\n<p>在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍（女队）：</p>\n<p>李雨璐</p>\n<p>柳晓洲</p>\n<p>代冰洋<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍：</p>\n<p>张浩博</p>\n<p>胡家辉</p>\n<p>肖衍南<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n铜奖队伍：</p>\n<p>曾路平</p>\n<p>刘佳豪</p>\n<p>余子烨</p>\n<p>这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。</p>\n<p>未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。</p>",
+            "author": "ACM算法研究实验室",
+            "category": "竞赛分享",
+            "publish_date": "2025-09-05 21:39:55.883109",
+            "reading_time": 1,
+            "view_count": 7,
+            "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">重庆市第十三届大学生程序设计大赛</a></h1> <p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p> <p>在此次大赛中，我室共三支队伍参赛并取得佳绩。",
+            "status": "published",
+            "order_index": 0,
+            "card_style": "{\"type\": \"image\", \"imageUrl\": \"./uploads/notifications/cards/card_405cdd8c300141d3b9a92bfa4c02aa9f.jpg\"}",
+            "tags": "",
+            "raw_content": "# 重庆市第十三届大学生程序设计大赛 \n2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。\n\n在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：\n![图片描述](./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png)\n银奖队伍（女队）：\n\n李雨璐\n\n柳晓洲\n\n代冰洋\n![图片描述](./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg)\n银奖队伍：\n\n张浩博\n\n胡家辉\n\n肖衍南\n![图片描述](./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png)\n铜奖队伍：\n\n曾路平\n\n刘佳豪\n\n余子烨\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。\n\n未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。",
+            "source_file": null,
+            "source_type": "online",
+            "created_at": "2025-09-05 13:39:55",
+            "updated_at": "2025-09-05 21:42:13.800382",
+            "word_count": 1335
+        },
+        "19": {
+            "id": 19,
+            "title": "2025年4月12日 实验室23级和24级的成员参加蓝桥杯取得7项省奖一项国奖的优异成绩",
+            "content": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。\n\n实验室始终鼓励成员们通过参与各类竞赛不断提升自我，期待他们在未来的学习与比赛中取得更加优异的成绩！",
+            "author": "ACM算法研究实验室",
+            "category": "竞赛分享",
+            "publish_date": "2025-09-05 21:20:11.948774",
+            "reading_time": 3,
+            "view_count": 1,
+            "excerpt": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。 这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。",
+            "status": "published",
+            "order_index": 0,
+            "card_style": "{\"type\": \"gradient\", \"gradient\": \"linear-gradient(135deg, #667eea 0%, #764ba2 100%)\"}",
+            "tags": "",
+            "raw_content": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。\n\n实验室始终鼓励成员们通过参与各类竞赛不断提升自我，期待他们在未来的学习与比赛中取得更加优异的成绩！",
+            "source_file": null,
+            "source_type": "online",
+            "created_at": "2025-09-05 13:20:11",
+            "updated_at": "2025-09-05 13:20:11",
+            "word_count": 219
+        },
+        "18": {
+            "id": 18,
+            "title": "2025年4月19日 实验室23级24级以及22级参与团体天梯赛取得省级二等奖的优异成绩",
+            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">天梯赛团体二等奖</a></h1>\n<p>2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。</p>\n<p>经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。这不仅是对参赛同学个人能力的肯定，更是对实验室长期以来坚持实践教学、提升团队协作能力的成果检验。</p>\n<p>在此，我们向所有参赛并取得佳绩的同学表示热烈祝贺，同时感谢实验室指导老师的辛勤指导与付出。实验室将继续鼓励同学们积极参与各类竞赛，不断挑战自我，再创佳绩。</p>",
+            "author": "ACM算法研究实验室",
+            "category": "竞赛分享",
+            "publish_date": "2025-09-01 10:36:26.565869",
+            "reading_time": 1,
+            "view_count": 52,
+            "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">天梯赛团体二等奖</a></h1> <p>2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。</p> <p>经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。",
+            "status": "published",
+            "order_index": 1,
+            "card_style": "{\"type\": \"image\", \"imageUrl\": \"./uploads/notifications/cards/card_9805607b1827426b816267b684c8ed91.jpg\"}",
+            "tags": "天梯赛",
+            "raw_content": "# 天梯赛团体二等奖\n2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。\n\n经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。这不仅是对参赛同学个人能力的肯定，更是对实验室长期以来坚持实践教学、提升团队协作能力的成果检验。\n\n在此，我们向所有参赛并取得佳绩的同学表示热烈祝贺，同时感谢实验室指导老师的辛勤指导与付出。实验室将继续鼓励同学们积极参与各类竞赛，不断挑战自我，再创佳绩。",
+            "source_file": "uploads/notifications/8e79167d-2eca-4076-a9ea-4dd4f4344390_README.md",
+            "source_type": "upload",
+            "created_at": "2025-09-01 02:36:26",
+            "updated_at": "2025-09-05 21:24:52.980127",
+            "word_count": 312
+        }
+    },
+    "research_data": {
+        "data": [
+            {
+                "category": "文献计量",
+                "created_at": "2025-08-31 04:24:01",
+                "description": "全球可解释人工智能（XAI）领域",
+                "id": 5,
+                "members": [
+                    "Qiu",
+                    "Zhike  ;Qin",
+                    "Yuhao"
+                ],
+                "order_index": 1,
+                "title": "Hotspots and Current Status of Global Explainable Artificial Intelligence: A Bibliometric Analysis",
+                "updated_at": "2025-09-09T14:07:38.585842"
+            },
+            {
+                "category": "证据理论",
+                "created_at": "2025-08-31 04:24:01",
+                "description": "针对证据理论（ET）在故障诊断中处理高度矛盾证据时易出现不合理结果的问题，聚焦故障诊断中的不确定性处理优化，研究涵盖冲突证据管理、基本置信分配（BBA）生成及完整故障诊断决策方法构建的技术方向。",
+                "id": 4,
+                "members": [
+                    "Qin",
+                    "Yuhao ; Qiu",
+                    "Zhike; Chen",
+                    "Zichong  ;Cai",
+                    "Rui"
+                ],
+                "order_index": 2,
+                "title": "An effective approach for fault diagnosis: Conflict management and BBA generation",
+                "updated_at": "2025-09-09T14:10:22.290471"
+            },
+            {
+                "category": "深度学习",
+                "created_at": "2025-09-09T12:56:34.227478",
+                "description": "针对眼底图像自动分析中双眼信息利用不充分、单尺度特征难捕病变、多标签任务疾病关系表征不足的挑战，提出以 HRNet 为骨干、含 MB-PFFM、CFAM 及 DSRG 模块的 MBFSNet，以提升多标签眼底疾病诊断精度。",
+                "id": 7,
+                "members": [
+                    "Qiu",
+                    "Zhike ;Qin",
+                    "Yuhao ;Zeng",
+                    "Luping  ;Wen",
+                    "Liangming"
+                ],
+                "order_index": 3,
+                "title": "MBFSNet: Multi-scale Binocular Fusion Semantic Co-occurrence Network for Multi-label Fundus Disease Diagnosis",
+                "updated_at": "2025-09-09T14:19:00.644241"
+            },
+            {
+                "category": "证据理论",
+                "created_at": "2025-09-09T14:16:00.507784",
+                "description": "针对复杂证据理论（CET）中复杂基本信度分配函数（CMFs）冲突度量难题，提出对称复 Renyi（SCR）散度及基于此的多源信息融合算法，以解决复杂系统中冲突消解与信息整合问题，并验证其在实际场景的有效性。",
+                "id": 8,
+                "members": [
+                    "Qin",
+                    "Yuhao ;Zhang",
+                    "Jinguo ;Qiu",
+                    "Zhike ;Chen",
+                    "Zichong ;Cai",
+                    "Rui"
+                ],
+                "order_index": 4,
+                "title": "Boosting complex evidence theory with complex belief Renyi divergence for multi-source information fusion",
+                "updated_at": "2025-09-09T14:16:00.507784"
+            }
+        ],
+        "pagination": {
+            "page": 1,
+            "per_page": 6,
+            "total": 4,
+            "total_pages": 1
+        },
+        "success": true
+    },
+    "research_categories": {
+        "data": [
+            {
+                "count": 2,
+                "name": "证据理论"
+            },
+            {
+                "count": 1,
+                "name": "文献计量"
+            },
+            {
+                "count": 1,
+                "name": "深度学习"
+            }
+        ],
+        "success": true
+    },
+    "grades": [
+        {
+            "created_at": "2025-08-30 01:50:50",
+            "description": "2024级年级组",
+            "id": 1,
+            "member_count": 6,
+            "name": "2024级",
+            "order_index": 2,
+            "updated_at": "2025-08-30 02:13:26"
+        },
+        {
+            "created_at": "2025-08-30 01:50:50",
+            "description": "2023级年级组",
+            "id": 2,
+            "member_count": 6,
+            "name": "2023级",
+            "order_index": 3,
+            "updated_at": "2025-08-30 02:13:26"
+        },
+        {
+            "created_at": "2025-08-30 01:50:50",
+            "description": "2022级年级组",
+            "id": 3,
+            "member_count": 5,
+            "name": "2022级",
+            "order_index": 4,
+            "updated_at": "2025-08-30 02:13:26"
+        },
+        {
+            "created_at": "2025-08-30 01:50:50",
+            "description": "2021级年级组",
+            "id": 4,
+            "member_count": 5,
+            "name": "2021级",
+            "order_index": 5,
+            "updated_at": "2025-08-30 02:13:26"
+        },
+        {
+            "created_at": "2025-08-30 01:50:50",
+            "description": "2020级年级组",
+            "id": 5,
+            "member_count": 6,
+            "name": "2020级",
+            "order_index": 6,
+            "updated_at": "2025-08-30 02:13:26"
+        },
+        {
+            "created_at": "2025-08-30 01:50:50",
+            "description": "2018级年级组",
+            "id": 7,
+            "member_count": 4,
+            "name": "2018级",
+            "order_index": 8,
+            "updated_at": "2025-08-30 02:13:26"
+        },
+        {
+            "created_at": "2025-08-30 01:50:50",
+            "description": "2017级年级组",
+            "id": 8,
+            "member_count": 5,
+            "name": "2017级",
+            "order_index": 9,
+            "updated_at": "2025-08-30 02:13:26"
+        },
+        {
+            "created_at": "2025-08-30 01:50:50",
+            "description": "2016级年级组",
+            "id": 9,
+            "member_count": 0,
+            "name": "2016级",
+            "order_index": 10,
+            "updated_at": "2025-08-30 02:13:26"
+        },
+        {
+            "created_at": "2025-09-01 02:14:37",
+            "description": "",
+            "id": 16,
+            "member_count": 0,
+            "name": "2025级",
+            "order_index": 11,
+            "updated_at": "2025-09-01 02:14:37"
+        },
+        {
+            "created_at": "2025-09-01 02:16:08",
+            "description": "",
+            "id": 17,
+            "member_count": 7,
+            "name": "2019级",
+            "order_index": 12,
+            "updated_at": "2025-09-01 02:16:08"
+        }
+    ],
+    "research_areas": [
+        {
+            "category": "文献计量",
+            "created_at": "2025-08-31 04:24:01",
+            "desc": "全球可解释人工智能（XAI）领域",
+            "description": "全球可解释人工智能（XAI）领域",
+            "id": 5,
+            "members": "[\"Qiu\", \"Zhike  ;Qin\", \"Yuhao\"]",
+            "order_index": 1,
+            "title": "Hotspots and Current Status of Global Explainable Artificial Intelligence: A Bibliometric Analysis",
+            "updated_at": "2025-09-09T14:07:38.585842"
+        },
+        {
+            "category": "证据理论",
+            "created_at": "2025-08-31 04:24:01",
+            "desc": "针对证据理论（ET）在故障诊断中处理高度矛盾证据时易出现不合理结果的问题，聚焦故障诊断中的不确定性处理优化，研究涵盖冲突证据管理、基本置信分配（BBA）生成及完整故障诊断决策方法构建的技术方向。",
+            "description": "针对证据理论（ET）在故障诊断中处理高度矛盾证据时易出现不合理结果的问题，聚焦故障诊断中的不确定性处理优化，研究涵盖冲突证据管理、基本置信分配（BBA）生成及完整故障诊断决策方法构建的技术方向。",
+            "id": 4,
+            "members": "[\"Qin\", \"Yuhao ; Qiu\", \"Zhike; Chen\", \"Zichong  ;Cai\", \"Rui\"]",
+            "order_index": 2,
+            "title": "An effective approach for fault diagnosis: Conflict management and BBA generation",
+            "updated_at": "2025-09-09T14:10:22.290471"
+        },
+        {
+            "category": "深度学习",
+            "created_at": "2025-09-09T12:56:34.227478",
+            "desc": "针对眼底图像自动分析中双眼信息利用不充分、单尺度特征难捕病变、多标签任务疾病关系表征不足的挑战，提出以 HRNet 为骨干、含 MB-PFFM、CFAM 及 DSRG 模块的 MBFSNet，以提升多标签眼底疾病诊断精度。",
+            "description": "针对眼底图像自动分析中双眼信息利用不充分、单尺度特征难捕病变、多标签任务疾病关系表征不足的挑战，提出以 HRNet 为骨干、含 MB-PFFM、CFAM 及 DSRG 模块的 MBFSNet，以提升多标签眼底疾病诊断精度。",
+            "id": 7,
+            "members": "[\"Qiu\", \"Zhike ;Qin\", \"Yuhao ;Zeng\", \"Luping  ;Wen\", \"Liangming\"]",
+            "order_index": 3,
+            "title": "MBFSNet: Multi-scale Binocular Fusion Semantic Co-occurrence Network for Multi-label Fundus Disease Diagnosis",
+            "updated_at": "2025-09-09T14:19:00.644241"
+        },
+        {
+            "category": "证据理论",
+            "created_at": "2025-09-09T14:16:00.507784",
+            "desc": "针对复杂证据理论（CET）中复杂基本信度分配函数（CMFs）冲突度量难题，提出对称复 Renyi（SCR）散度及基于此的多源信息融合算法，以解决复杂系统中冲突消解与信息整合问题，并验证其在实际场景的有效性。",
+            "description": "针对复杂证据理论（CET）中复杂基本信度分配函数（CMFs）冲突度量难题，提出对称复 Renyi（SCR）散度及基于此的多源信息融合算法，以解决复杂系统中冲突消解与信息整合问题，并验证其在实际场景的有效性。",
+            "id": 8,
+            "members": "[\"Qin\", \"Yuhao ;Zhang\", \"Jinguo ;Qiu\", \"Zhike ;Chen\", \"Zichong ;Cai\", \"Rui\"]",
+            "order_index": 4,
+            "title": "Boosting complex evidence theory with complex belief Renyi divergence for multi-source information fusion",
+            "updated_at": "2025-09-09T14:16:00.507784"
+        }
+    ],
+    "notifications": [
+        {
+            "author": "ACM算法研究实验室",
+            "card_style": "{\"type\": \"image\", \"imageUrl\": \"./uploads/notifications/cards/card_405cdd8c300141d3b9a92bfa4c02aa9f.jpg\"}",
+            "category": "竞赛分享",
+            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">重庆市第十三届大学生程序设计大赛</a></h1>\n<p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p>\n<p>在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍（女队）：</p>\n<p>李雨璐</p>\n<p>柳晓洲</p>\n<p>代冰洋<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍：</p>\n<p>张浩博</p>\n<p>胡家辉</p>\n<p>肖衍南<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n铜奖队伍：</p>\n<p>曾路平</p>\n<p>刘佳豪</p>\n<p>余子烨</p>\n<p>这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。</p>\n<p>未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。</p>",
+            "created_at": "2025-09-05 13:39:55",
+            "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">重庆市第十三届大学生程序设计大赛</a></h1> <p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p> <p>在此次大赛中，我室共三支队伍参赛并取得佳绩。",
+            "id": 20,
+            "order_index": 0,
+            "publish_date": "2025-09-05 21:39:55.883109",
+            "raw_content": "# 重庆市第十三届大学生程序设计大赛 \n2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。\n\n在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：\n![图片描述](./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png)\n银奖队伍（女队）：\n\n李雨璐\n\n柳晓洲\n\n代冰洋\n![图片描述](./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg)\n银奖队伍：\n\n张浩博\n\n胡家辉\n\n肖衍南\n![图片描述](./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png)\n铜奖队伍：\n\n曾路平\n\n刘佳豪\n\n余子烨\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。\n\n未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。",
+            "reading_time": 1,
+            "source_file": null,
+            "source_type": "online",
+            "status": "published",
+            "tags": "",
+            "title": "2025年5月10日 我室成员在重庆市第十三届大学生程序设计大赛中斩获两银一铜的优异成绩",
+            "updated_at": "2025-09-05 21:42:13.800382",
+            "view_count": 7,
+            "word_count": 1335
+        },
+        {
+            "author": "ACM算法研究实验室",
+            "card_style": "{\"type\": \"gradient\", \"gradient\": \"linear-gradient(135deg, #667eea 0%, #764ba2 100%)\"}",
+            "category": "竞赛分享",
+            "content": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。\n\n实验室始终鼓励成员们通过参与各类竞赛不断提升自我，期待他们在未来的学习与比赛中取得更加优异的成绩！",
+            "created_at": "2025-09-05 13:20:11",
+            "excerpt": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。 这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。",
+            "id": 19,
+            "order_index": 0,
+            "publish_date": "2025-09-05 21:20:11.948774",
+            "raw_content": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。\n\n实验室始终鼓励成员们通过参与各类竞赛不断提升自我，期待他们在未来的学习与比赛中取得更加优异的成绩！",
+            "reading_time": 3,
+            "source_file": null,
+            "source_type": "online",
+            "status": "published",
+            "tags": "",
+            "title": "2025年4月12日 实验室23级和24级的成员参加蓝桥杯取得7项省奖一项国奖的优异成绩",
+            "updated_at": "2025-09-05 13:20:11",
+            "view_count": 1,
+            "word_count": 219
+        },
+        {
+            "author": "ACM算法研究实验室",
+            "card_style": "{\"type\": \"image\", \"imageUrl\": \"./uploads/notifications/cards/card_9805607b1827426b816267b684c8ed91.jpg\"}",
+            "category": "竞赛分享",
+            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">天梯赛团体二等奖</a></h1>\n<p>2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。</p>\n<p>经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。这不仅是对参赛同学个人能力的肯定，更是对实验室长期以来坚持实践教学、提升团队协作能力的成果检验。</p>\n<p>在此，我们向所有参赛并取得佳绩的同学表示热烈祝贺，同时感谢实验室指导老师的辛勤指导与付出。实验室将继续鼓励同学们积极参与各类竞赛，不断挑战自我，再创佳绩。</p>",
+            "created_at": "2025-09-01 02:36:26",
+            "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">天梯赛团体二等奖</a></h1> <p>2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。</p> <p>经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。",
+            "id": 18,
+            "order_index": 1,
+            "publish_date": "2025-09-01 10:36:26.565869",
+            "raw_content": "# 天梯赛团体二等奖\n2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。\n\n经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。这不仅是对参赛同学个人能力的肯定，更是对实验室长期以来坚持实践教学、提升团队协作能力的成果检验。\n\n在此，我们向所有参赛并取得佳绩的同学表示热烈祝贺，同时感谢实验室指导老师的辛勤指导与付出。实验室将继续鼓励同学们积极参与各类竞赛，不断挑战自我，再创佳绩。",
+            "reading_time": 1,
+            "source_file": "uploads/notifications/8e79167d-2eca-4076-a9ea-4dd4f4344390_README.md",
+            "source_type": "upload",
+            "status": "published",
+            "tags": "天梯赛",
+            "title": "2025年4月19日 实验室23级24级以及22级参与团体天梯赛取得省级二等奖的优异成绩",
+            "updated_at": "2025-09-05 21:24:52.980127",
+            "view_count": 52,
+            "word_count": 312
+        }
+    ],
+    "notifications_ordered": [
+        {
+            "id": 20,
+            "title": "2025年5月10日 我室成员在重庆市第十三届大学生程序设计大赛中斩获两银一铜的优异成绩",
+            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">重庆市第十三届大学生程序设计大赛</a></h1>\n<p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p>\n<p>在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍（女队）：</p>\n<p>李雨璐</p>\n<p>柳晓洲</p>\n<p>代冰洋<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍：</p>\n<p>张浩博</p>\n<p>胡家辉</p>\n<p>肖衍南<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n铜奖队伍：</p>\n<p>曾路平</p>\n<p>刘佳豪</p>\n<p>余子烨</p>\n<p>这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。</p>\n<p>未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。</p>",
+            "author": "ACM算法研究实验室",
+            "category": "竞赛分享",
+            "publish_date": "2025-09-05 21:39:55.883109",
+            "reading_time": 1,
+            "view_count": 7,
+            "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">重庆市第十三届大学生程序设计大赛</a></h1> <p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p> <p>在此次大赛中，我室共三支队伍参赛并取得佳绩。",
+            "status": "published",
+            "order_index": 0,
+            "card_style": "{\"type\": \"image\", \"imageUrl\": \"./uploads/notifications/cards/card_405cdd8c300141d3b9a92bfa4c02aa9f.jpg\"}",
+            "tags": "",
+            "raw_content": "# 重庆市第十三届大学生程序设计大赛 \n2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。\n\n在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：\n![图片描述](./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png)\n银奖队伍（女队）：\n\n李雨璐\n\n柳晓洲\n\n代冰洋\n![图片描述](./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg)\n银奖队伍：\n\n张浩博\n\n胡家辉\n\n肖衍南\n![图片描述](./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png)\n铜奖队伍：\n\n曾路平\n\n刘佳豪\n\n余子烨\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。\n\n未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。",
+            "source_file": null,
+            "source_type": "online",
+            "created_at": "2025-09-05 13:39:55",
+            "updated_at": "2025-09-05 21:42:13.800382",
+            "word_count": 1335
+        },
+        {
+            "id": 19,
+            "title": "2025年4月12日 实验室23级和24级的成员参加蓝桥杯取得7项省奖一项国奖的优异成绩",
+            "content": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。\n\n实验室始终鼓励成员们通过参与各类竞赛不断提升自我，期待他们在未来的学习与比赛中取得更加优异的成绩！",
+            "author": "ACM算法研究实验室",
+            "category": "竞赛分享",
+            "publish_date": "2025-09-05 21:20:11.948774",
+            "reading_time": 3,
+            "view_count": 1,
+            "excerpt": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。 这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。",
+            "status": "published",
+            "order_index": 0,
+            "card_style": "{\"type\": \"gradient\", \"gradient\": \"linear-gradient(135deg, #667eea 0%, #764ba2 100%)\"}",
+            "tags": "",
+            "raw_content": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。\n\n实验室始终鼓励成员们通过参与各类竞赛不断提升自我，期待他们在未来的学习与比赛中取得更加优异的成绩！",
+            "source_file": null,
+            "source_type": "online",
+            "created_at": "2025-09-05 13:20:11",
+            "updated_at": "2025-09-05 13:20:11",
+            "word_count": 219
+        },
+        {
+            "id": 18,
+            "title": "2025年4月19日 实验室23级24级以及22级参与团体天梯赛取得省级二等奖的优异成绩",
+            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">天梯赛团体二等奖</a></h1>\n<p>2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。</p>\n<p>经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。这不仅是对参赛同学个人能力的肯定，更是对实验室长期以来坚持实践教学、提升团队协作能力的成果检验。</p>\n<p>在此，我们向所有参赛并取得佳绩的同学表示热烈祝贺，同时感谢实验室指导老师的辛勤指导与付出。实验室将继续鼓励同学们积极参与各类竞赛，不断挑战自我，再创佳绩。</p>",
+            "author": "ACM算法研究实验室",
+            "category": "竞赛分享",
+            "publish_date": "2025-09-01 10:36:26.565869",
+            "reading_time": 1,
+            "view_count": 52,
+            "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">天梯赛团体二等奖</a></h1> <p>2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。</p> <p>经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。",
+            "status": "published",
+            "order_index": 1,
+            "card_style": "{\"type\": \"image\", \"imageUrl\": \"./uploads/notifications/cards/card_9805607b1827426b816267b684c8ed91.jpg\"}",
+            "tags": "天梯赛",
+            "raw_content": "# 天梯赛团体二等奖\n2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。\n\n经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。这不仅是对参赛同学个人能力的肯定，更是对实验室长期以来坚持实践教学、提升团队协作能力的成果检验。\n\n在此，我们向所有参赛并取得佳绩的同学表示热烈祝贺，同时感谢实验室指导老师的辛勤指导与付出。实验室将继续鼓励同学们积极参与各类竞赛，不断挑战自我，再创佳绩。",
+            "source_file": "uploads/notifications/8e79167d-2eca-4076-a9ea-4dd4f4344390_README.md",
+            "source_type": "upload",
+            "created_at": "2025-09-01 02:36:26",
+            "updated_at": "2025-09-05 21:24:52.980127",
+            "word_count": 312
+        }
+    ]
+};
+    
+    // 原版兼容性标记
+    window.STATIC_MODE = true;
+    window.IS_STATIC_SITE = true;
+    
+    console.log('🎨 静态数据已加载，完美复刻模式启动:', Object.keys(window.STATIC_DATA));
+    </script>
+
+    <script>
+    // WebSocket静态模式完全禁用 - 避免连接错误
+    
+    // 在Socket.IO库加载之前就进行拦截
+    (function() {
+        // 保存原始的WebSocket构造函数
+        const OriginalWebSocket = window.WebSocket;
+        const OriginalEventSource = window.EventSource;
+        
+        // 完全禁用WebSocket连接
+        window.WebSocket = function() {
+            console.log('🚫 静态模式：WebSocket连接已禁用');
+            // 返回一个模拟的WebSocket对象，避免错误
+            return {
+                close: function() {},
+                send: function() {},
+                addEventListener: function() {},
+                removeEventListener: function() {},
+                readyState: 3, // CLOSED状态
+                CONNECTING: 0,
+                OPEN: 1,
+                CLOSING: 2,
+                CLOSED: 3
+            };
+        };
+        
+        // 禁用EventSource
+        window.EventSource = function() {
+            console.log('🚫 静态模式：EventSource连接已禁用');
+            return {
+                close: function() {},
+                addEventListener: function() {},
+                removeEventListener: function() {},
+                readyState: 2 // CLOSED状态
+            };
+        };
+        
+        // 覆盖Socket.IO库
+        window.io = function() {
+            console.log('🔗 静态模式：Socket.IO已完全模拟，无实际连接');
+            return {
+                on: function(event, callback) { 
+                    // 对于连接事件，立即触发回调以模拟成功连接
+                    if (event === 'connect') {
+                        setTimeout(callback, 10);
+                    }
+                },
+                emit: function() { /* 静态模式：忽略发送事件 */ },
+                connect: function() { 
+                    console.log('🔗 静态模式：模拟Socket.IO连接成功'); 
+                    return this;
+                },
+                disconnect: function() { /* 静态模式：忽略断开 */ },
+                connected: true, // 模拟连接状态
+                id: 'static-mode-socket',
+                close: function() {},
+                open: function() { return this; }
+            };
+        };
+        
+        // 立即标记为已连接，避免等待
+        window.socketConnected = true;
+        console.log('🚀 静态模式：Socket.IO已完全禁用，无连接错误');
+        
+        // 隐藏连接状态相关的UI元素和外部资源加载错误
+        setTimeout(function() {
+            // 隐藏可能的连接状态提示元素
+            const connectionElements = [
+                '.connection-status',
+                '.socket-status', 
+                '.connection-error',
+                '.offline-indicator',
+                '[class*="connection"]',
+                '[class*="socket"]',
+                '[id*="connection"]',
+                '[id*="socket"]'
+            ];
+            
+            connectionElements.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el && el.style) {
+                        el.style.display = 'none';
+                        console.log('🚫 隐藏连接状态元素:', selector);
+                    }
+                });
+            });
+            
+            // 特别处理可能显示在左下角的连接错误提示
+            const errorMessages = document.querySelectorAll('*');
+            errorMessages.forEach(el => {
+                if (el.textContent && 
+                    (el.textContent.includes('WebSocket') || 
+                     el.textContent.includes('connection') || 
+                     el.textContent.includes('连接') ||
+                     el.textContent.includes('offline') ||
+                     el.textContent.includes('断开') ||
+                     el.textContent.includes('Failed to load') ||
+                     el.textContent.includes('ERR_FILE_NOT_FOUND'))) {
+                    const computedStyle = window.getComputedStyle(el);
+                    if (computedStyle.position === 'fixed' || 
+                        computedStyle.position === 'absolute') {
+                        el.style.display = 'none';
+                        console.log('🚫 隐藏连接错误提示:', el.textContent.substring(0, 50));
+                    }
+                }
+            });
+            
+            // 禁用外部统计脚本的错误提示
+            window.addEventListener('error', function(e) {
+                if (e.target && e.target.src && 
+                    (e.target.src.includes('busuanzi') || 
+                     e.target.src.includes('analytics') ||
+                     e.target.src.includes('track'))) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🚫 静态模式：已忽略外部统计脚本加载错误');
+                    return false;
+                }
+            }, true);
+        }, 100);
+    })();
+    
+    // 覆盖fetch API，使其支持静态数据
+    if (window.STATIC_MODE) {
+        const originalFetch = window.fetch;
+        window.fetch = function(url, options) {
+            // API路径映射到静态数据
+            const apiMap = {
+                '/api/team': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.team_members || [])}),
+                '/api/papers': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.papers || [])}),
+                '/api/frontend/papers': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.frontend_papers || [])}),
+                '/api/algorithms': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.algorithms || [])}),
+                '/api/algorithm-awards': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.algorithm_awards || [])}),
+                '/api/frontend/algorithm-awards': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.algorithm_awards || [])}),
+                '/api/frontend/innovation-projects': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.innovation_projects || [])}),
+                '/api/advisors': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.advisors || [])}),
+                '/api/frontend/advisors': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.advisors || [])}),
+                '/api/frontend/activities': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.activities || [])}),
+                '/api/innovation/stats': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.innovation_stats || {})}),
+                '/api/innovation/carousel': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.innovation_carousel || [])}),
+                '/api/innovation/achievements': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.achievements || [])}),
+                '/api/innovation/training-projects': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.training_projects || [])}),
+                '/api/innovation/intellectual-properties': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.intellectual_properties || [])}),
+                '/api/innovation/enterprise-cooperations': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.enterprise_cooperations || [])}),
+                '/api/research': () => {
+                    const researchDataRaw = window.STATIC_DATA.research_data || {};
+                    // 保持原始API响应格式，包含data和pagination信息
+                    return Promise.resolve({ok: true, json: () => Promise.resolve(researchDataRaw)});
+                },
+                '/api/research/categories': () => {
+                    const categoriesData = window.STATIC_DATA.research_categories || {};
+                    // 保持原始API响应格式：{data: [...], success: true}
+                    return Promise.resolve({ok: true, json: () => Promise.resolve(categoriesData)});
+                },
+                '/api/grades': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.grades || [])}),
+                '/api/research-areas': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.research_areas || [])}),
+                // 添加科创页面缺失的API端点
+                '/api/innovation/frontend/stats': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.innovation_stats || {})}),
+                '/api/innovation/frontend/achievements': () => {
+                    const achievementsData = window.STATIC_DATA.achievements || [];
+                    // 按type分组数据，符合前端期望的数据结构
+                    const groupedData = {
+                        awards: achievementsData.filter(item => item.type === 'award'),
+                        patents: achievementsData.filter(item => item.type === 'patent')
+                    };
+                    return Promise.resolve({ok: true, json: () => Promise.resolve(groupedData)});
+                },
+                '/api/innovation/frontend/carousel': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.innovation_carousel || [])}),
+                '/api/innovation/frontend/training-projects': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.training_projects || [])}),
+                '/api/innovation/frontend/intellectual-properties': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.intellectual_properties || [])}),
+                '/api/innovation/frontend/enterprise-cooperations': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.enterprise_cooperations || [])}),
+                // 通知相关API端点
+                '/api/notifications': () => {
+                    // 使用有序数组而不是对象值，保持正确的排序
+                    const notifications = window.STATIC_DATA.notifications_ordered || [];
+                    console.log('🔄 静态模式API调用 /api/notifications:', notifications.length, '条通知（保持排序）');
+                    return Promise.resolve({ok: true, json: () => Promise.resolve(notifications)});
+                }
+            };
+            
+                            // 处理带参数的API请求
+            if (typeof url === 'string') {
+                // 处理algorithm-awards API的查询参数（时间戳等）
+                if (url.startsWith('/api/frontend/algorithm-awards?') || url.startsWith('/api/algorithm-awards?')) {
+                    console.log('🔄 静态模式API调用 (algorithm-awards):', url);
+                    const awards = window.STATIC_DATA.algorithm_awards || [];
+                    console.log('🏆 返回algorithm_awards数据:', awards.length, '条记录');
+                    return Promise.resolve({ok: true, json: () => Promise.resolve(awards)});
+                }
+                
+                // 处理algorithms API的查询参数（时间戳等）
+                if (url.startsWith('/api/frontend/algorithms?') || url.startsWith('/api/algorithms?')) {
+                    console.log('🔄 静态模式API调用 (algorithms):', url);
+                    const algorithms = window.STATIC_DATA.algorithms || [];
+                    console.log('🧮 返回algorithms数据:', algorithms.length, '条记录');
+                    return Promise.resolve({ok: true, json: () => Promise.resolve(algorithms)});
+                }
+                
+                // 处理research API的查询参数
+                if (url.startsWith('/api/research?') || url === '/api/research') {
+                    console.log('🔄 静态模式API调用 (带参数):', url);
+                    // 解析查询参数
+                    const urlObj = new URL(url, 'http://localhost');
+                    const category = urlObj.searchParams.get('category');
+                    const page = parseInt(urlObj.searchParams.get('page')) || 1;
+                    const perPage = parseInt(urlObj.searchParams.get('per_page')) || 6;
+                    
+                    // 修复数据结构 - 正确提取嵌套的data数组
+                    let researchDataRaw = window.STATIC_DATA.research_data || {};
+                    let data = [];
+                    
+                    if (Array.isArray(researchDataRaw)) {
+                        data = researchDataRaw;
+                    } else if (researchDataRaw.data && Array.isArray(researchDataRaw.data)) {
+                        data = researchDataRaw.data;
+                    }
+                    
+                    console.log('🔍 原始研究数据:', researchDataRaw);
+                    console.log('🔍 提取的数据数组:', data, '长度:', data.length);
+                    
+                    // 按分类过滤
+                    if (category && category !== 'all') {
+                        data = data.filter(item => item.category === category);
+                        console.log('🔍 按分类过滤后:', category, '数据长度:', data.length);
+                    }
+                    
+                    // 分页处理
+                    const startIndex = (page - 1) * perPage;
+                    const endIndex = startIndex + perPage;
+                    const paginatedData = data.slice(startIndex, endIndex);
+                    
+                    console.log('🔍 分页结果:', `第${page}页`, '从', startIndex, '到', endIndex, '共', paginatedData.length, '条');
+                    
+                    return Promise.resolve({
+                        ok: true, 
+                        json: () => Promise.resolve({
+                            data: paginatedData,
+                            pagination: {
+                                page: page,
+                                per_page: perPage,
+                                total: data.length,
+                                total_pages: Math.ceil(data.length / perPage)
+                            },
+                            success: true
+                        })
+                    });
+                }
+                
+                // 检查是否是简单API请求
+                if (apiMap[url]) {
+                    console.log('🔄 静态模式API调用:', url);
+                    return apiMap[url]();
+                }
+            }
+            
+            // 其他请求使用原版fetch
+            return originalFetch(url, options);
+        };
+    }
+    </script>
+        
+</head>
+<body>
+    <!-- 粒子背景 -->
+    <div id="particles-js"></div>
+    
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">ACM LAB</a>
+        <div class="nav-links">
+            <div class="dropdown">
+                <a href="introduction.html" class="nav-link">概况</a>
+            </div>
+            
+            <a href="team.html" class="nav-link">团队</a>
+            
+            <div class="dropdown">
+                <a href="algorithm.html" class="nav-link">成果</a>
+                <div class="dropdown-content">
+                        <a href="algorithm.html" class="dropdown-link">算法</a>
+                        <a href="paper.html" class="dropdown-link">论文</a>
+                        <a href="innovation.html" class="dropdown-link">科创</a>
+                </div>
+            </div>
+            
+            <a href="dynamic.html" class="nav-link">动态</a>
+            
+            <div class="dropdown">
+                <a href="algorithm-recruitment.html" class="nav-link">加入我们</a>
+                <div class="dropdown-content">
+                    <a href="algorithm-recruitment.html" class="dropdown-link">算法组招生</a>
+                        <a href="project-recruitment.html" class="dropdown-link">项目组招生</a>
+                </div>
+            </div>
+            
+
+        </div>
+        <div class="menu-toggle">☰</div>
+        </nav>
+    
+    <!-- 算法组招生内容 -->
+    <div class="recruitment-content">
+        
+        <!-- 页面标题区域 -->
+        <header class="pt-32 pb-20 relative z-10">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-10">
+                    <div class="max-w-2xl">
+                        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6" style="font-family: 'Orbitron', sans-serif;">
+                            <span class="block text-white">算法组</span>
+                            <span class="block text-shadow-neon-blue mt-2" style="color: #00ffff;">招新详情</span>
+                        </h1>
+                        <p class="text-xl text-gray-300">
+                            加入我们的算法学习团队，在这里精进编程能力，挑战各类大学生算法比赛，用辉煌的战绩书写你的大学篇章！
+                        </p>
+                    </div>
+                    
+                    <div class="w-full md:w-64 h-64 relative">
+                        <div class="absolute inset-0 rounded-full border-4 animate-pulse-slow" style="border-color: rgba(0, 255, 255, 0.3);"></div>
+                        <div class="absolute rounded-full border-4 animate-pulse-slow" style="inset: 10%; border-color: rgba(0, 255, 255, 0.4); animation-delay: 0.5s;"></div>
+                        <div class="absolute rounded-full border-4 animate-pulse-slow" style="inset: 20%; border-color: rgba(0, 255, 255, 0.5); animation-delay: 1s;"></div>
+                        <div class="absolute flex items-center justify-center" style="inset: 30%;">
+                            <i class="fa fa-code-fork text-5xl text-shadow-neon-blue" style="color: #00ffff;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- 主要内容 -->
+        <main class="relative z-10 pb-20">
+            <!-- 研究方向 -->
+            <section class="py-16">
+                <div class="container mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" style="font-family: 'Orbitron', sans-serif;">
+                            我们的<span class="text-shadow-neon-blue" style="color: #00ffff;">竞赛算法</span>
+                        </h2>
+                        <div class="w-24 h-1 mx-auto" style="background-color: #00ffff;"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- 方向1 -->
+                        <div class="hologram rounded-lg p-8 hover:border-glow-blue transition-all duration-500 transform hover:-translate-y-2 group">
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform" style="background-color: rgba(0, 255, 255, 0.1); border: 1px solid #00ffff;">
+                                <i class="fa fa-sitemap text-2xl" style="color: #00ffff;"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">并查集</h3>
+                            <p class="text-gray-300">
+                                “并查集”是一种高效处理动态连通性问题的数据结构，核心功能是快速判断两个元素是否属于同一集合，以及将两个集合合并为一个集合。它广泛应用于图论（如最小生成树 Kruskal 算法）、网络连接判断等场景。
+                            </p>
+                        </div>
+                        
+                        <!-- 方向2 -->
+                        <div class="hologram rounded-lg p-8 hover:border-glow-blue transition-all duration-500 transform hover:-translate-y-2 group">
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform" style="background-color: rgba(0, 255, 255, 0.1); border: 1px solid #00ffff;">
+                                <i class="fa fa-random text-2xl" style="color: #00ffff;"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">二分算法</h3>
+                            <p class="text-gray-300">
+                                设计高效的随机化算法，利用概率分析方法解决确定性算法难以处理的问题，分析算法的期望性能和复杂度。
+                            </p>
+                        </div>
+                        
+                        <!-- 方向3 -->
+                        <div class="hologram rounded-lg p-8 hover:border-glow-blue transition-all duration-500 transform hover:-translate-y-2 group">
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform" style="background-color: rgba(0, 255, 255, 0.1); border: 1px solid #00ffff;">
+                                <i class="fa fa-bolt text-2xl" style="color: #00ffff;"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">近似算法与优化</h3>
+                            <p class="text-gray-300">
+                                “二分” 是计算机科学与数学中一种高效的分治策略，核心思想是通过不断将问题规模 “减半”，快速缩小解的范围，从而降低时间复杂度。它广泛应用于查找、求解最优解（二分答案）等场景，是算法设计中的基础且高效的工具。
+                            </p>
+                        </div>
+                        
+                        <!-- 方向4 -->
+                        <div class="hologram rounded-lg p-8 hover:border-glow-blue transition-all duration-500 transform hover:-translate-y-2 group">
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform" style="background-color: rgba(0, 255, 255, 0.1); border: 1px solid #00ffff;">
+                                <i class="fa fa-cogs text-2xl" style="color: #00ffff;"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">贪心算法</h3>
+                            <p class="text-gray-300">
+                                贪心算法是一种在每一步决策中都采取当前状态下最优（即最有利）的选择，从而希望最终得到全局最优解的近似算法思想。它不追求回溯或全局规划，仅通过局部最优策略逐步逼近全局最优。
+                            </p>
+                        </div>
+                        
+                        <!-- 方向5 -->
+                        <div class="hologram rounded-lg p-8 hover:border-glow-blue transition-all duration-500 transform hover:-translate-y-2 group">
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform" style="background-color: rgba(0, 255, 255, 0.1); border: 1px solid #00ffff;">
+                                <i class="fa fa-brain text-2xl" style="color: #00ffff;"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">动态规划</h3>
+                            <p class="text-gray-300">
+                                动态规划是一种通过将复杂问题分解为重叠子问题，并存储子问题的解以避免重复计算，从而高效求解优化问题的算法思想。它的核心是 “以空间换时间”，适用于具有特定结构（重叠子问题、最优子结构）的问题。
+                            </p>
+                        </div>
+                        
+                        <!-- 方向6 -->
+                        <div class="hologram rounded-lg p-8 hover:border-glow-blue transition-all duration-500 transform hover:-translate-y-2 group">
+                            <div class="w-14 h-14 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform" style="background-color: rgba(0, 255, 255, 0.1); border: 1px solid #00ffff;">
+                                <i class="fa fa-shield text-2xl" style="color: #00ffff;"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">模拟算法</h3>
+                            <p class="text-gray-300">
+                                “模拟算法” 是一种通过编程模拟现实场景或问题的运行过程，从而得出结果的算法思想。模拟算法是解决实际问题的基础方法，尤其适用于逻辑直观、步骤明确的场景。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 能力要求 -->
+            <section class="py-16" style="background-color: rgba(18, 18, 41, 0.5);">
+                <div class="container mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" style="font-family: 'Orbitron', sans-serif;">
+                            我们期待你具备的<span class="text-shadow-neon-blue" style="color: #00ffff;">能力</span>
+                        </h2>
+                        <div class="w-24 h-1 mx-auto" style="background-color: #00ffff;"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <!-- 能力雷达图 -->
+                            <div class="hologram rounded-lg p-6 mb-8">
+                                <h3 class="text-xl font-bold mb-6 text-center" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">核心能力模型</h3>
+                                <div class="w-full h-80">
+                                    <canvas id="skillsRadarChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="hologram rounded-lg p-6 hover:border-glow-blue transition-all duration-300">
+                                <div class="flex items-start gap-4">
+                                    <div class="mt-1" style="color: #00ffff;"><i class="fa fa-check-circle text-xl"></i></div>
+                                    <div>
+                                        <h4 class="text-lg font-bold mb-2 text-white" style="font-family: 'Orbitron', sans-serif;">较为扎实的数学基础</h4>
+                                        <p class="text-gray-400">
+                                            如果你是大一萌新：
+
+                                            我们希望你对数学充满好奇与热情，并且已经打下了扎实的基础。在这里，你将发现数学不仅仅是课本上的公式，更是解决复杂问题的强大武器。  
+                                            
+                                            如果你是大二同学：
+
+                                            我们期待你已掌握高等数学和线性代数等核心数学知识。这些是你迈向算法和人工智能领域的关键，也是你在这里大展身手的坚实基石。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="hologram rounded-lg p-6 hover:border-glow-blue transition-all duration-300">
+                                <div class="flex items-start gap-4">
+                                    <div class="mt-1" style="color: #00ffff;"><i class="fa fa-check-circle text-xl"></i></div>
+                                    <div>
+                                        <h4 class="text-lg font-bold mb-2 text-white" style="font-family: 'Orbitron', sans-serif;">基本的编程基础</h4>
+                                        <p class="text-gray-400">
+                                            如果你是大一萌新：
+
+只要你对算法和编程充满热情，即使是零基础也欢迎加入。如果你有一定的编程基础，那就更好了！
+
+
+
+
+如果你是大二同学：
+
+我们希望你至少熟练掌握一门编程语言（如C/C++或Python），并具备一定的算法基础。在这里，你将把所学知识转化为真正的实力。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="hologram rounded-lg p-6 hover:border-glow-blue transition-all duration-300">
+                                <div class="flex items-start gap-4">
+                                    <div class="mt-1" style="color: #00ffff;"><i class="fa fa-check-circle text-xl"></i></div>
+                                    <div>
+                                        <h4 class="text-lg font-bold mb-2 text-white" style="font-family: 'Orbitron', sans-serif;">问题分析与解决能力</h4>
+                                        <p class="text-gray-400">
+                                            如果你善于洞察问题的本质，能够将复杂的现实抽象为清晰的逻辑模型；如果你拥有严密的思维和天马行空的创意，并渴望将这些才华转化为高效的算法解决方案，那么，你就是我们正在寻找的伙伴。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="hologram rounded-lg p-6 hover:border-glow-blue transition-all duration-300">
+                                <div class="flex items-start gap-4">
+                                    <div class="mt-1" style="color: #00ffff;"><i class="fa fa-check-circle text-xl"></i></div>
+                                    <div>
+                                        <h4 class="text-lg font-bold mb-2 text-white" style="font-family: 'Orbitron', sans-serif;">良好的团队协作能力</h4>
+                                        <p class="text-gray-400">
+                                            在这里，你不是一个人在战斗。我们看重团队的凝聚力与协作精神，期待你不仅能独当一面，更能成为团队中不可或缺的一份子。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 培养计划 -->
+            <section class="py-16">
+                <div class="container mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" style="font-family: 'Orbitron', sans-serif;">
+                            算法组<span class="text-shadow-neon-blue" style="color: #00ffff;">培养计划</span>
+                        </h2>
+                        <div class="w-24 h-1 mx-auto" style="background-color: #00ffff;"></div>
+                        <p class="mt-6 text-gray-400 max-w-2xl mx-auto">
+                            我们为算法组成员提供系统化的培养方案，帮助你快速精进你的算法能力
+                        </p>
+                    </div>
+                    
+                    <div class="relative">
+                        <!-- 时间线 -->
+                        <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 transform -translate-x-1/2" style="background-color: rgba(0, 255, 255, 0.3);"></div>
+                        
+                        <!-- 阶段1 -->
+                        <div class="relative mb-16 md:mb-24">
+                            <div class="flex flex-col md:flex-row items-center">
+                                <div class="md:w-1/2 md:pr-16 md:text-right mb-8 md:mb-0 md:order-1">
+                                    <h3 class="text-2xl font-bold mb-3" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">基础选拔阶段 (1个月)</h3>
+                                    <div class="hologram rounded-lg p-6 inline-block md:float-right">
+                                        <ul class="space-y-3 text-gray-300">
+                                            <li class="flex md:justify-end items-center gap-2">
+                                                <span>入群学习： 跟随招新群内文档，系统学习基础算法核心概念。</span>
+                                                <i class="fa fa-angle-right" style="color: #00ffff;"></i>
+                                            </li>
+                                            <li class="flex md:justify-end items-center gap-2">
+                                                <span>线上训练： 通过QQ群获取学习资料算,  法题与线上答疑支持。
+
+                                                </span>
+                                                <i class="fa fa-angle-right" style="color: #00ffff;"></i>
+                                            </li>
+                                            <li class="flex md:justify-end items-center gap-2">
+                                                <span>能力测验： 阶段末参与选拔测验，检验算法基础与编程能力。</span>
+                                                <i class="fa fa-angle-right" style="color: #00ffff;"></i>
+                                            </li>
+                                            <li class="flex md:justify-end items-center gap-2">
+                                                <span>正式筛选： 根据测验以及面试结果择优录取，成为正式成员。</span>
+                                                <i class="fa fa-angle-right" style="color: #00ffff;"></i>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="absolute left-1/2 top-0 w-6 h-6 rounded-full border-4 transform -translate-x-1/2 z-10" style="background-color: #00ffff; border-color: #0a0a16;"></div>
+                                
+                                <div class="md:w-1/2 md:pl-16 md:order-2">
+                                    <div class="w-20 h-20 rounded-full border flex items-center justify-center mx-auto md:mx-0" style="background-color: rgba(0, 255, 255, 0.1); border-color: #00ffff;">
+                                        <span class="text-3xl font-bold" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">01</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 阶段2 -->
+                        <div class="relative mb-16 md:mb-24">
+                            <div class="flex flex-col md:flex-row items-center">
+                                <div class="md:w-1/2 md:pr-16 mb-8 md:mb-0">
+                                    <div class="w-20 h-20 rounded-full border flex items-center justify-center mx-auto md:ml-auto md:mr-0" style="background-color: rgba(0, 255, 255, 0.1); border-color: #00ffff;">
+                                        <span class="text-3xl font-bold" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">02</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="absolute left-1/2 top-0 w-6 h-6 rounded-full border-4 transform -translate-x-1/2 z-10" style="background-color: #00ffff; border-color: #0a0a16;"></div>
+                                
+                                <div class="md:w-1/2 md:pl-16">
+                                    <h3 class="text-2xl font-bold mb-3" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">程序设计训练阶段 (5个月)</h3>
+                                    <div class="hologram rounded-lg p-6">
+                                        <ul class="space-y-3 text-gray-300">
+                                            <li class="flex items-center gap-2">
+                                                <i class="fa fa-angle-left" style="color: #00ffff;"></i>
+                                                <span>系统算法精讲： 深入学习数据结构、图论、动态规划等核心算法，并进行大量编程实践</span>
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <i class="fa fa-angle-left" style="color: #00ffff;"></i>
+                                                <span>算法竞赛专项集训： 针对蓝桥杯、天梯赛、ICPC/CCPC等比赛进行高强度训练与模拟。</span>
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <i class="fa fa-angle-left" style="color: #00ffff;"></i>
+                                                <span>编程能力强化： 注重代码实现效率、优化技巧与问题解决能力培养。</span>
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <i class="fa fa-angle-left" style="color: #00ffff;"></i>
+                                                <span>小组经验交流： 定期组织成员分享学习心得、解题思路与技术讨论。</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 阶段3 -->
+                        <div class="relative">
+                            <div class="flex flex-col md:flex-row items-center">
+                                <div class="md:w-1/2 md:pr-16 md:text-right mb-8 md:mb-0 md:order-1">
+                                    <h3 class="text-2xl font-bold mb-3" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">深度研究与应用阶段 (2个月+)</h3>
+                                    <div class="hologram rounded-lg p-6 inline-block md:float-right">
+                                        <ul class="space-y-3 text-gray-300">
+                                            <li class="flex md:justify-end items-center gap-2">
+                                                <span>前沿理论学习： 深入学习深度学习、计算机视觉等AI领域的基础理论与核心算法。
+
+                                                </span>
+                                                <i class="fa fa-angle-right" style="color: #00ffff;"></i>
+                                            </li>
+                                            <li class="flex md:justify-end items-center gap-2">
+                                                <span>实践学习成果： 参与科研项目，将理论知识应用于具体问题，进行项目实战训练。</span>
+                                                <i class="fa fa-angle-right" style="color: #00ffff;"></i>
+                                            </li>
+                                            <li class="flex md:justify-end items-center gap-2">
+                                                <span>学术论文写作： 学习论文结构、写作技巧与规范，培养学术研究和学术表达能力。</span>
+                                                <i class="fa fa-angle-right" style="color: #00ffff;"></i>
+                                            </li>
+                                            <li class="flex md:justify-end items-center gap-2">
+                                                <span>定期组会交流： 定期召开组会，分享学习经验，探讨遇到的难题，促进知识共享。</span>
+                                                <i class="fa fa-angle-right" style="color: #00ffff;"></i>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="absolute left-1/2 top-0 w-6 h-6 rounded-full border-4 transform -translate-x-1/2 z-10" style="background-color: #00ffff; border-color: #0a0a16;"></div>
+                                
+                                <div class="md:w-1/2 md:pl-16 md:order-2">
+                                    <div class="w-20 h-20 rounded-full border flex items-center justify-center mx-auto md:mx-0" style="background-color: rgba(0, 255, 255, 0.1); border-color: #00ffff;">
+                                        <span class="text-3xl font-bold" style="font-family: 'Orbitron', sans-serif; color: #00ffff;">03</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 申请流程 -->
+            <section class="py-16" style="background-color: rgba(18, 18, 41, 0.5);">
+                <div class="container mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" style="font-family: 'Orbitron', sans-serif;">
+                            申请<span class="text-shadow-neon-blue" style="color: #00ffff;">流程</span>
+                        </h2>
+                        <div class="w-24 h-1 mx-auto" style="background-color: #00ffff;"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <!-- 步骤1 -->
+                        <div class="hologram rounded-lg p-6 hover:border-glow-blue transition-all duration-500 relative overflow-hidden group">
+                            <div class="absolute -right-10 -top-10 w-20 h-20 rounded-full group-hover:scale-150 transition-transform duration-500" style="background-color: rgba(0, 255, 255, 0.1);"></div>
+                            <div class="relative z-10">
+                                <div class="w-12 h-12 rounded-full border flex items-center justify-center mb-6" style="background-color: rgba(0, 255, 255, 0.2); border-color: #00ffff;">
+                                    <span class="font-bold" style="color: #00ffff; font-family: 'Orbitron', sans-serif;">01</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-3 text-white" style="font-family: 'Orbitron', sans-serif;">群内学习</h3>
+                                <p class="text-gray-400 text-sm">
+                                    进入招新群，跟随管理员提供的学习文档，系统学习基础算法知识，为后续选拔奠定基础。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- 步骤2 -->
+                        <div class="hologram rounded-lg p-6 hover:border-glow-blue transition-all duration-500 relative overflow-hidden group">
+                            <div class="absolute -right-10 -top-10 w-20 h-20 rounded-full group-hover:scale-150 transition-transform duration-500" style="background-color: rgba(0, 255, 255, 0.1);"></div>
+                            <div class="relative z-10">
+                                <div class="w-12 h-12 rounded-full border flex items-center justify-center mb-6" style="background-color: rgba(0, 255, 255, 0.2); border-color: #00ffff;">
+                                    <span class="font-bold" style="color: #00ffff; font-family: 'Orbitron', sans-serif;">02</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-3 text-white" style="font-family: 'Orbitron', sans-serif;">申请考核</h3>
+                                <p class="text-gray-400 text-sm">
+                                    完成招新群算法学习后，填写管理员发布的申请表，并参加实验室组织的算法能力测验。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- 步骤3 -->
+                        <div class="hologram rounded-lg p-6 hover:border-glow-blue transition-all duration-500 relative overflow-hidden group">
+                            <div class="absolute -right-10 -top-10 w-20 h-20 rounded-full group-hover:scale-150 transition-transform duration-500" style="background-color: rgba(0, 255, 255, 0.1);"></div>
+                            <div class="relative z-10">
+                                <div class="w-12 h-12 rounded-full border flex items-center justify-center mb-6" style="background-color: rgba(0, 255, 255, 0.2); border-color: #00ffff;">
+                                    <span class="font-bold" style="color: #00ffff; font-family: 'Orbitron', sans-serif;">03</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-3 text-white" style="font-family: 'Orbitron', sans-serif;"> 面试邀约</h3>
+                                <p class="text-gray-400 text-sm">
+                                    收到实验室面试邀请的同学，请按照管理员提供的信息，准时到达指定地点参加面试。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- 步骤4 -->
+                        <div class="hologram rounded-lg p-6 hover:border-glow-blue transition-all duration-500 relative overflow-hidden group">
+                            <div class="absolute -right-10 -top-10 w-20 h-20 rounded-full group-hover:scale-150 transition-transform duration-500" style="background-color: rgba(0, 255, 255, 0.1);"></div>
+                            <div class="relative z-10">
+                                <div class="w-12 h-12 rounded-full border flex items-center justify-center mb-6" style="background-color: rgba(0, 255, 255, 0.2); border-color: #00ffff;">
+                                    <span class="font-bold" style="color: #00ffff; font-family: 'Orbitron', sans-serif;">04</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-3 text-white" style="font-family: 'Orbitron', sans-serif;">正式加入</h3>
+                                <p class="text-gray-400 text-sm">
+                                    面试通过并接到通知的同学，将正式成为实验室团队一员，共同开启算法探索之旅。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+
+        </main>
+    </div>
+    <!-- 页脚 -->
+    <footer id="footer" class="footer">
+        <a href="index.html" class="footer-logo">ACM实验室</a>
+        
+        <div class="footer-links">
+            <a href="introduction.html" class="footer-link">概况</a>
+            <a href="team.html" class="footer-link">团队</a>
+            <a href="algorithm.html" class="footer-link">算法</a>
+            <a href="paper.html" class="footer-link">论文</a>
+            <a href="innovation.html" class="footer-link">科创</a>
+            <a href="dynamic.html" class="footer-link">动态</a>
+            <a href="algorithm-recruitment.html" class="footer-link">算法组招生</a>
+            <a href="project-recruitment.html" class="footer-link">项目组招生</a>
+        </div>
+        
+        <div class="footer-social">
+            <a href="#" class="social-icon" title="微信"><i class="fab fa-weixin"></i></a>
+            <a href="https:/s1.imagehub.cc/images/2025/08/28/d80fe4abf0cd9a20fde76c7a3d5849a8.png" class="social-icon" title="微博"><i class="fab fa-weibo"></i></a>
+            <a href="https:/s1.imagehub.cc/images/2025/08/28/4859e46f5945f5d8210456ecc89f7494.jpeg" class="social-icon" title="小红书"><i class="fas fa-book-open"></i></a>
+            <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https:/mp.weixin.qq.com/s/your-wechat-official-account" class="social-icon" title="微信公众号"><i class="fas fa-newspaper"></i></a>
+            <a href="https:/space.bilibili.com/1599858052?spm_id_from=333.788.upinfo.head.click" class="social-icon" title="哔哩哔哩"><i class="fab fa-bilibili"></i></a>
+            <a href="#" class="social-icon" title="邮箱"><i class="fas fa-envelope"></i></a>
+        </div>
+        
+        <p class="copyright">© 2023 ACM算法与科研创新实验室. 保留所有权利.</p>
+    </footer>
+    
+    <script src="https:/cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // 粒子背景初始化（仅保留展示相关）
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#3a86ff' },
+                shape: { type: 'circle', stroke: { width: 0, color: '#000000' }, polygon: { nb_sides: 5 } },
+                opacity: { value: 0.5 },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: '#3a86ff', opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: {
+                    grab: { distance: 140, line_linked: { opacity: 1 } },
+                    bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 },
+                    repulse: { distance: 200, duration: 0.4 },
+                    push: { particles_nb: 4 },
+                    remove: { particles_nb: 2 }
+                }
+            },
+            retina_detect: true
+        });
+        
+        // 初始化GSAP的ScrollTrigger插件
+        if (typeof gsap !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+        }
+        
+        // 能力雷达图
+        if (typeof Chart !== 'undefined') {
+            const ctx = document.getElementById('skillsRadarChart');
+            if (ctx) {
+                const skillsChart = new Chart(ctx.getContext('2d'), {
+                    type: 'radar',
+                    data: {
+                        labels: ['数学基础', '算法设计', '编程能力', '问题分析', '问题解决', '团队协作'],
+                        datasets: [{
+                            label: '期望能力水平',
+                            data: [90, 95, 85, 90, 85, 80],
+                            backgroundColor: 'rgba(0, 255, 255, 0.2)',
+                            borderColor: 'rgba(0, 255, 255, 0.8)',
+                            pointBackgroundColor: 'rgba(0, 255, 255, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(0, 255, 255, 1)'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                pointLabels: {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    font: {
+                                        family: 'Consolas, Monaco, monospace'
+                                    }
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.5)',
+                                    backdropColor: 'transparent'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    font: {
+                                        family: 'Consolas, Monaco, monospace'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+
+        
+        // 滚动动画
+        const animateOnScroll = () => {
+            if (typeof gsap !== 'undefined') {
+                const sections = document.querySelectorAll('section');
+                
+                sections.forEach(section => {
+                    gsap.from(section, {
+                        opacity: 0,
+                        y: 50,
+                        duration: 1,
+                        scrollTrigger: {
+                            trigger: section,
+                            start: 'top 85%',
+                            end: 'top 30%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    });
+                });
+            }
+        };
+        
+        // 页面加载完成后执行动画
+        window.addEventListener('load', () => {
+            animateOnScroll();
+        });
+        
+
+    </script>
+
+    <script>
+    // 静态数据增强器 - 完美复刻模式
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!window.STATIC_MODE) return; // 只在静态模式下运行
+        
+        console.log('🎨 启动静态数据增强器...');
+        
+        // 等待原版脚本执行完成后再增强
+        setTimeout(function() {
+            // 检查并增强原版的数据加载函数
+            if (typeof window.loadTeamMembers === 'function') {
+                const original = window.loadTeamMembers;
+                window.loadTeamMembers = function() {
+                    console.log('📊 静态模式：使用本地团队数据');
+                    // 调用原版函数，数据会通过被覆盖的fetch获取
+                    return original.apply(this, arguments);
+                };
+            }
+            
+            if (typeof window.loadPapers === 'function') {
+                const original = window.loadPapers;
+                window.loadPapers = function() {
+                    console.log('📊 静态模式：使用本地论文数据');
+                    return original.apply(this, arguments);
+                };
+            }
+            
+            if (typeof window.loadInnovationProjects === 'function') {
+                const original = window.loadInnovationProjects;
+                window.loadInnovationProjects = function() {
+                    console.log('📊 静态模式：使用本地科创数据');
+                    return original.apply(this, arguments);
+                };
+            }
+            
+            if (typeof window.loadActivities === 'function') {
+                const original = window.loadActivities;
+                window.loadActivities = function() {
+                    console.log('📊 静态模式：使用本地活动数据');
+                    return original.apply(this, arguments);
+                };
+            }
+            
+            if (typeof window.loadAlgorithms === 'function') {
+                const original = window.loadAlgorithms;
+                window.loadAlgorithms = function() {
+                    console.log('📊 静态模式：使用本地算法数据');
+                    return original.apply(this, arguments);
+                };
+            }
+            
+            // 手动触发原版的数据加载函数（如果存在）
+            setTimeout(function() {
+                if (typeof window.loadTeamMembers === 'function') window.loadTeamMembers();
+                if (typeof window.loadTeamLeaders === 'function') window.loadTeamLeaders();
+                if (typeof window.loadPapers === 'function') window.loadPapers();
+                if (typeof window.loadInnovationProjects === 'function') window.loadInnovationProjects();
+                if (typeof window.loadActivities === 'function') window.loadActivities();
+                // 跳过 loadAlgorithms，保留algorithm页面的原始静态内容
+                // if (typeof window.loadAlgorithms === 'function') window.loadAlgorithms();
+                if (typeof window.loadInnovationData === 'function') window.loadInnovationData();
+                
+                console.log('✅ 静态数据增强完成，algorithm页面保留原始静态内容');
+            }, 500);
+            
+        }, 100);
+    });
+    </script>
+        
+</body>
+</html>

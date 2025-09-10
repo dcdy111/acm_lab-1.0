@@ -1,0 +1,42 @@
+[
+  {
+    "achievement": null,
+    "budget": null,
+    "category": "技术研发",
+    "created_at": "2025-09-10 10:20:00",
+    "description": "为华为提供AI算法优化和芯片适配服务",
+    "end_date": null,
+    "enterprise_logo": null,
+    "enterprise_name": "华为技术",
+    "id": 20,
+    "image_display_url": null,
+    "image_file": null,
+    "image_url": null,
+    "leader": "陈教授",
+    "sort_order": 1,
+    "start_date": null,
+    "status": "active",
+    "title": "AI算法优化与芯片适配",
+    "updated_at": "2025-09-10 10:20:00"
+  },
+  {
+    "achievement": null,
+    "budget": null,
+    "category": "软件开发",
+    "created_at": "2025-09-10 10:20:00",
+    "description": "为腾讯开发企业级大数据分析平台",
+    "end_date": null,
+    "enterprise_logo": null,
+    "enterprise_name": "腾讯科技",
+    "id": 21,
+    "image_display_url": null,
+    "image_file": null,
+    "image_url": null,
+    "leader": "刘教授",
+    "sort_order": 2,
+    "start_date": null,
+    "status": "active",
+    "title": "大数据分析平台开发",
+    "updated_at": "2025-09-10 10:20:00"
+  }
+]

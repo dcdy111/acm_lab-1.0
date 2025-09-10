@@ -1,0 +1,74 @@
+{
+  "data": [
+    {
+      "category": "文献计量",
+      "created_at": "2025-08-31 04:24:01",
+      "description": "全球可解释人工智能（XAI）领域",
+      "id": 5,
+      "members": [
+        "Qiu",
+        "Zhike  ;Qin",
+        "Yuhao"
+      ],
+      "order_index": 1,
+      "title": "Hotspots and Current Status of Global Explainable Artificial Intelligence: A Bibliometric Analysis",
+      "updated_at": "2025-09-09T14:07:38.585842"
+    },
+    {
+      "category": "证据理论",
+      "created_at": "2025-08-31 04:24:01",
+      "description": "针对证据理论（ET）在故障诊断中处理高度矛盾证据时易出现不合理结果的问题，聚焦故障诊断中的不确定性处理优化，研究涵盖冲突证据管理、基本置信分配（BBA）生成及完整故障诊断决策方法构建的技术方向。",
+      "id": 4,
+      "members": [
+        "Qin",
+        "Yuhao ; Qiu",
+        "Zhike; Chen",
+        "Zichong  ;Cai",
+        "Rui"
+      ],
+      "order_index": 2,
+      "title": "An effective approach for fault diagnosis: Conflict management and BBA generation",
+      "updated_at": "2025-09-09T14:10:22.290471"
+    },
+    {
+      "category": "深度学习",
+      "created_at": "2025-09-09T12:56:34.227478",
+      "description": "针对眼底图像自动分析中双眼信息利用不充分、单尺度特征难捕病变、多标签任务疾病关系表征不足的挑战，提出以 HRNet 为骨干、含 MB-PFFM、CFAM 及 DSRG 模块的 MBFSNet，以提升多标签眼底疾病诊断精度。",
+      "id": 7,
+      "members": [
+        "Qiu",
+        "Zhike ;Qin",
+        "Yuhao ;Zeng",
+        "Luping  ;Wen",
+        "Liangming"
+      ],
+      "order_index": 3,
+      "title": "MBFSNet: Multi-scale Binocular Fusion Semantic Co-occurrence Network for Multi-label Fundus Disease Diagnosis",
+      "updated_at": "2025-09-09T14:19:00.644241"
+    },
+    {
+      "category": "证据理论",
+      "created_at": "2025-09-09T14:16:00.507784",
+      "description": "针对复杂证据理论（CET）中复杂基本信度分配函数（CMFs）冲突度量难题，提出对称复 Renyi（SCR）散度及基于此的多源信息融合算法，以解决复杂系统中冲突消解与信息整合问题，并验证其在实际场景的有效性。",
+      "id": 8,
+      "members": [
+        "Qin",
+        "Yuhao ;Zhang",
+        "Jinguo ;Qiu",
+        "Zhike ;Chen",
+        "Zichong ;Cai",
+        "Rui"
+      ],
+      "order_index": 4,
+      "title": "Boosting complex evidence theory with complex belief Renyi divergence for multi-source information fusion",
+      "updated_at": "2025-09-09T14:16:00.507784"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 6,
+    "total": 4,
+    "total_pages": 1
+  },
+  "success": true
+}
