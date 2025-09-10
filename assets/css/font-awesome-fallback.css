@@ -1,0 +1,68 @@
+/* Font Awesome 备用样式 - 确保图标正常显示 */
+
+/* 基础图标样式 */
+.fa, .fas, .far, .fab, .fal, .fad {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "Font Awesome 6 Pro" !important;
+    font-weight: 900;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    display: inline-block;
+}
+
+.fab {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400;
+}
+
+/* 常用图标的Unicode备用方案 */
+.fa-home::before { content: "🏠"; }
+.fa-users::before { content: "👥"; }
+.fa-code::before { content: "💻"; }
+.fa-trophy::before { content: "🏆"; }
+.fa-rocket::before { content: "🚀"; }
+.fa-flask::before { content: "🧪"; }
+.fa-atom::before { content: "⚛️"; }
+.fa-eye::before { content: "👁️"; }
+.fa-mobile-alt::before { content: "📱"; }
+.fa-arrow-right::before { content: "→"; }
+.fa-chevron-left::before { content: "‹"; }
+.fa-chevron-right::before { content: "›"; }
+.fa-file-text-o::before { content: "📄"; }
+.fa-book-open::before { content: "📖"; }
+.fa-newspaper::before { content: "📰"; }
+.fa-bilibili::before { content: "📺"; }
+.fa-weibo::before { content: "📱"; }
+
+/* 社交媒体图标备用 */
+.fab.fa-weibo::before { content: "📱"; }
+.fab.fa-bilibili::before { content: "📺"; }
+
+/* 确保图标在页脚中正常显示 */
+.footer .fa, .footer .fas, .footer .far, .footer .fab {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+    color: #9ca3af;
+}
+
+.footer .fa:hover, .footer .fas:hover, .footer .far:hover, .footer .fab:hover {
+    color: #ffffff;
+}
+
+/* 确保图标在导航中正常显示 */
+.nav .fa, .nav .fas, .nav .far, .nav .fab {
+    margin-right: 0.5rem;
+}
+
+/* 确保图标在按钮中正常显示 */
+button .fa, button .fas, button .far, button .fab {
+    margin-right: 0.5rem;
+}
+
+/* 响应式图标 */
+@media (max-width: 768px) {
+    .fa, .fas, .far, .fab, .fal, .fad {
+        font-size: 0.9rem;
+    }
+}

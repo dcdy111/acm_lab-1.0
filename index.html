@@ -11,14 +11,28 @@
     
     <!-- 关键样式表 -->
     <link rel="stylesheet" href="./highlight.css">
+    <link rel="stylesheet" href="./assets/css/local-styles.css">
     
     <!-- Tailwind CSS - 关键渲染路径 -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 备用方案：如果Tailwind加载失败，使用本地样式 -->
+    <script>
+        // 检查Tailwind是否加载成功
+        setTimeout(function() {
+            if (typeof tailwind === 'undefined') {
+                console.log('Tailwind CSS加载失败，使用备用样式');
+                // 可以在这里添加备用样式逻辑
+            }
+        }, 3000);
+    </script>
     
     <!-- 非关键资源异步加载 -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/v4-shims.min.css">
+    <!-- Font Awesome 备用方案 -->
+    <link rel="stylesheet" href="./assets/css/font-awesome-fallback.css">
     <script defer src="./highlight.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     <script>
