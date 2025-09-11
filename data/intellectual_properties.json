@@ -6,16 +6,16 @@
     "description": "本软著对应基于云平台的大数据技能智能测评系统，旨在解决智能评测中代码安全、多机器性能差异导致的时间衡量不准、高 I/O 开销等问题，保障评测结果准确、过程高效、运行稳定。系统采用微服务框架开发，借助 Docker 容器沙盒特性构建完善评测系统，打造具备稳定性的分布式架构，支持团队管理功能，采用新技术实现各类功能，并可通过 Docker Compose 一键部署。",
     "grant_date": "2025-05-22",
     "id": 16,
-    "image_display_url": "/static/uploads/intellectual_properties/intellectual_properties_20250909_133855_ad42aebb.png",
+    "image_display_url": "https://s1.imagehub.cc/images/2025/09/11/81c75d34bc6206228eefddd9cfd4427e.png",
     "image_file": null,
-    "image_url": "/static/uploads/intellectual_properties/intellectual_properties_20250909_133855_ad42aebb.png",
+    "image_url": "https://s1.imagehub.cc/images/2025/09/11/81c75d34bc6206228eefddd9cfd4427e.png",
     "inventors": "罗晓龙，李卓燕，杨雅媚，吴悠",
     "patent_number": "",
     "sort_order": 0,
     "status": "active",
     "title": "Alioth 在线代码评测系统",
     "type": "patent",
-    "updated_at": "2025-09-09 13:44:55.845515"
+    "updated_at": "2025-09-11 13:21:16.682678"
   },
   {
     "application_date": "2024-01-15",
@@ -24,15 +24,15 @@
     "description": "该系统可实现多种文档格式间的高效转换，为用户在文档处理与格式兼容方面提供了便利，助力提升文档管理与使用的效率。",
     "grant_date": "2025-05-21",
     "id": 5,
-    "image_display_url": "/static/uploads/intellectual_properties/intellectual_properties_20250909_143526_f2ce80bc",
+    "image_display_url": "https://s1.imagehub.cc/images/2025/09/11/0f7987f0500bf2312ee9c070a15f535f.jpeg",
     "image_file": null,
-    "image_url": "/static/uploads/intellectual_properties/intellectual_properties_20250909_143526_f2ce80bc",
+    "image_url": "https://s1.imagehub.cc/images/2025/09/11/0f7987f0500bf2312ee9c070a15f535f.jpeg",
     "inventors": "曾路平",
     "patent_number": "",
     "sort_order": 1,
     "status": "active",
     "title": "多格式文档转换系统 V1.0",
     "type": "copyright",
-    "updated_at": "2025-09-09 14:35:28.737002"
+    "updated_at": "2025-09-11 13:19:08.824435"
   }
 ]

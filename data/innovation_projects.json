@@ -5,12 +5,12 @@
     "description": "提供高效易用的编程评测解决方案，以微服务 + Docker 保障稳定、一键部署降门槛，配创新负载均衡提效率、知识图谱推荐强针对性，已完成部署与文档，后续将托管大数据平台拓展能力。",
     "detail_url": "",
     "id": 1,
-    "image_url": "/static/uploads/innovation_projects/project_30823f5b23ca5dc5.png",
+    "image_url": "https://s1.imagehub.cc/images/2025/09/11/da14ebc03d4dd8fe57b175bf4a9b2679.png",
     "sort_order": 1,
     "status": "active",
     "tags": "Docker容器化技术，Docker容器化技术，负载均衡算法，微服务架构，熔断机制",
     "title": "SLOJ：大数据智能测评及推荐系统",
-    "updated_at": "2025-09-09T13:29:16.572037"
+    "updated_at": "2025-09-11T12:37:23.032343"
   },
   {
     "category": "校级创新创业项目",
@@ -18,11 +18,11 @@
     "description": "本项目旨在实现高精度多标签眼底疾病识别，提出多尺度双目融合语义共现网络（MBFSNet），融合双目多尺度特征并建模疾病语义关系，在相关数据集表现优异。还构建眼底图像智能诊断平台 EyeFusion，集成图像预处理增强、可视化及多项辅助功能，辅助医生筛查疾病，兼具理论与应用价值。",
     "detail_url": "https://github.com/acm-lab/cv-platform",
     "id": 4,
-    "image_url": "/static/uploads/innovation_projects/project_ef94534c480295ad.png",
+    "image_url": "https://s1.imagehub.cc/images/2025/09/11/65a7ee35079010b6f9f4c2d316e20c49.png",
     "sort_order": 2,
     "status": "active",
     "tags": "多尺度双目融合语义共现网络（MBFSNet）、眼底图像智能诊断平台（EyeFusion）、高分辨率网络（HRNet）、Grad - CAM",
     "title": "多尺度双目融合语义共现网络与眼底图像智能诊断平台（EyeFusion）",
-    "updated_at": "2025-09-09T13:23:37.431220"
+    "updated_at": "2025-09-11T12:37:42.088151"
   }
 ]
