@@ -5,15 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACM算法研究实验室</title>
     
-    <!-- 本地样式备用方案 -->
-    <link rel="stylesheet" href="./assets/css/local-styles.css">
-    <link rel="stylesheet" href="./assets/css/font-awesome-fallback.css">
-
-    <!-- 字体和图标 -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/v4-shims.min.css">
-
     <!-- 性能优化加载器 -->
     <script defer src="./js/performance-loader.js"></script>
 
@@ -748,6 +739,119 @@
             .progress-ring-circle { transition: stroke-dashoffset 0.5s ease; transform: rotate(-90deg); transform-origin: 50% 50%; }
             .timeline-dot::before { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; background-color: #6C63FF; left: -10px; top: 50%; transform: translateY(-50%); z-index: 1; }
             .timeline-line::before { content: ''; position: absolute; width: 2px; height: 100%; background-color: rgba(108, 99, 255, 0.3); left: 0; top: 0; }
+
+            /* ========================= 大学生创新创业训练计划轮播箭头样式 ========================= */
+            /* 流光动画 */
+            @keyframes trainingCarouselGlow {
+                0% {
+                    transform: translateX(-100%) translateY(-50%) rotate(45deg);
+                    opacity: 0;
+                }
+                50% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateX(200%) translateY(-50%) rotate(45deg);
+                    opacity: 0;
+                }
+            }
+
+            /* 轮播箭头样式 */
+            .training-carousel-btn {
+                position: relative;
+                transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                transform-origin: center;
+            }
+
+            .training-carousel-btn::before {
+                content: '';
+                position: absolute;
+                inset: -2px;
+                padding: 2px;
+                background: linear-gradient(45deg, transparent, rgba(58, 134, 255, 0.5), transparent);
+                border-radius: inherit;
+                mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                mask-composite: xor;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .training-carousel-btn:hover {
+                background: rgba(58, 134, 255, 0.2) !important;
+                border-color: #3a86ff !important;
+                transform: scale(1.15) !important;
+                box-shadow: 0 8px 25px rgba(58, 134, 255, 0.4) !important;
+            }
+
+            .training-carousel-btn:hover::before {
+                opacity: 1;
+            }
+
+            .training-carousel-btn:hover i {
+                transform: scale(1.2);
+                text-shadow: 0 0 10px rgba(58, 134, 255, 0.8);
+            }
+
+            .training-carousel-btn:active {
+                transform: scale(1.05) !important;
+                transition: transform 0.1s ease;
+            }
+
+            /* 脉冲效果 */
+            .training-carousel-btn::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: inherit;
+                background: rgba(58, 134, 255, 0.2);
+                transform: scale(0);
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+
+            .training-carousel-btn:hover::after {
+                transform: scale(1.5);
+                opacity: 0.3;
+                animation: trainingCarouselPulse 1.5s infinite;
+            }
+
+            @keyframes trainingCarouselPulse {
+                0% {
+                    transform: scale(1);
+                    opacity: 0.3;
+                }
+                50% {
+                    transform: scale(1.3);
+                    opacity: 0.1;
+                }
+                100% {
+                    transform: scale(1.6);
+                    opacity: 0;
+                }
+            }
+
+            /* 轮播箭头容器样式 */
+            #trainingCarouselNavControls {
+                transition: opacity 0.3s ease;
+            }
+
+            #projectCarousel:hover #trainingCarouselNavControls {
+                opacity: 1;
+            }
+
+            /* 响应式适配 */
+            @media (max-width: 768px) {
+                .training-carousel-btn {
+                    width: 40px !important;
+                    height: 40px !important;
+                    font-size: 16px !important;
+                }
+                
+                #trainingCarouselNavControls {
+                    padding: 0 1rem !important;
+                }
+            }
+            /* ========================= 轮播箭头样式结束 ========================= */
 
             /* ========================= 统一滚动条美化样式 ========================= */
             /* 全局滚动条 - 竖直方向 */
@@ -2622,6 +2726,30 @@
             "winner_name": "曾路平"
         }
     ],
+    "project_overview": [
+        {
+            "created_at": "2025-08-31 09:33:51",
+            "description": "自2024-2025",
+            "icon": "fa-code",
+            "id": 500,
+            "name": "省赛获奖",
+            "order_index": 1,
+            "status": "active",
+            "updated_at": "2025-09-07T16:40:08.494667",
+            "value": 20
+        },
+        {
+            "created_at": "2025-08-31 09:33:51",
+            "description": "统计区间2024-2025",
+            "icon": "fa-project-diagram",
+            "id": 502,
+            "name": "国赛获奖",
+            "order_index": 2,
+            "status": "active",
+            "updated_at": "2025-09-07T16:42:49.265753",
+            "value": 4
+        }
+    ],
     "innovation_projects": [
         {
             "category": "省级创新创业项目",
@@ -2916,18 +3044,18 @@
         "20": {
             "id": 20,
             "title": "2025年5月10日 我室成员在重庆市第十三届大学生程序设计大赛中斩获两银一铜的优异成绩",
-            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">重庆市第十三届大学生程序设计大赛</a></h1>\n<p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p>\n<p>在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍（女队）：</p>\n<p>李雨璐</p>\n<p>柳晓洲</p>\n<p>代冰洋<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍：</p>\n<p>张浩博</p>\n<p>胡家辉</p>\n<p>肖衍南<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n铜奖队伍：</p>\n<p>曾路平</p>\n<p>刘佳豪</p>\n<p>余子烨</p>\n<p>这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。</p>\n<p>未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。</p>",
+            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">重庆市第十三届大学生程序设计大赛</a></h1>\n<p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p>\n<p>在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213835.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍（女队）：</p>\n<p>李雨璐</p>\n<p>柳晓洲</p>\n<p>代冰洋<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213859.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍：</p>\n<p>张浩博</p>\n<p>胡家辉</p>\n<p>肖衍南<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213844.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n铜奖队伍：</p>\n<p>曾路平</p>\n<p>刘佳豪</p>\n<p>余子烨</p>\n<p>这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。</p>\n<p>未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。</p>",
             "author": "ACM算法研究实验室",
             "category": "竞赛分享",
             "publish_date": "2025-09-05 21:39:55.883109",
             "reading_time": 1,
-            "view_count": 7,
+            "view_count": 16,
             "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">重庆市第十三届大学生程序设计大赛</a></h1> <p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p> <p>在此次大赛中，我室共三支队伍参赛并取得佳绩。",
             "status": "published",
             "order_index": 0,
             "card_style": "{\"type\": \"image\", \"imageUrl\": \"./uploads/notifications/cards/card_405cdd8c300141d3b9a92bfa4c02aa9f.jpg\"}",
             "tags": "",
-            "raw_content": "# 重庆市第十三届大学生程序设计大赛 \n2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。\n\n在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：\n![图片描述](./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png)\n银奖队伍（女队）：\n\n李雨璐\n\n柳晓洲\n\n代冰洋\n![图片描述](./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg)\n银奖队伍：\n\n张浩博\n\n胡家辉\n\n肖衍南\n![图片描述](./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png)\n铜奖队伍：\n\n曾路平\n\n刘佳豪\n\n余子烨\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。\n\n未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。",
+            "raw_content": "# 重庆市第十三届大学生程序设计大赛 \n2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。\n\n在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：\n![图片描述](file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213835.png)\n银奖队伍（女队）：\n\n李雨璐\n\n柳晓洲\n\n代冰洋\n![图片描述](file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213859.png)\n银奖队伍：\n\n张浩博\n\n胡家辉\n\n肖衍南\n![图片描述](file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213844.png)\n铜奖队伍：\n\n曾路平\n\n刘佳豪\n\n余子烨\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。\n\n未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。",
             "source_file": null,
             "source_type": "online",
             "created_at": "2025-09-05 13:39:55",
@@ -2942,7 +3070,7 @@
             "category": "竞赛分享",
             "publish_date": "2025-09-05 21:20:11.948774",
             "reading_time": 3,
-            "view_count": 1,
+            "view_count": 9,
             "excerpt": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。 这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。",
             "status": "published",
             "order_index": 0,
@@ -2963,7 +3091,7 @@
             "category": "竞赛分享",
             "publish_date": "2025-09-01 10:36:26.565869",
             "reading_time": 1,
-            "view_count": 52,
+            "view_count": 60,
             "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">天梯赛团体二等奖</a></h1> <p>2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。</p> <p>经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。",
             "status": "published",
             "order_index": 1,
@@ -3211,13 +3339,13 @@
             "author": "ACM算法研究实验室",
             "card_style": "{\"type\": \"image\", \"imageUrl\": \"./uploads/notifications/cards/card_405cdd8c300141d3b9a92bfa4c02aa9f.jpg\"}",
             "category": "竞赛分享",
-            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">重庆市第十三届大学生程序设计大赛</a></h1>\n<p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p>\n<p>在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍（女队）：</p>\n<p>李雨璐</p>\n<p>柳晓洲</p>\n<p>代冰洋<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍：</p>\n<p>张浩博</p>\n<p>胡家辉</p>\n<p>肖衍南<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n铜奖队伍：</p>\n<p>曾路平</p>\n<p>刘佳豪</p>\n<p>余子烨</p>\n<p>这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。</p>\n<p>未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。</p>",
+            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">重庆市第十三届大学生程序设计大赛</a></h1>\n<p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p>\n<p>在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213835.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍（女队）：</p>\n<p>李雨璐</p>\n<p>柳晓洲</p>\n<p>代冰洋<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213859.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍：</p>\n<p>张浩博</p>\n<p>胡家辉</p>\n<p>肖衍南<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213844.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n铜奖队伍：</p>\n<p>曾路平</p>\n<p>刘佳豪</p>\n<p>余子烨</p>\n<p>这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。</p>\n<p>未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。</p>",
             "created_at": "2025-09-05 13:39:55",
             "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">重庆市第十三届大学生程序设计大赛</a></h1> <p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p> <p>在此次大赛中，我室共三支队伍参赛并取得佳绩。",
             "id": 20,
             "order_index": 0,
             "publish_date": "2025-09-05 21:39:55.883109",
-            "raw_content": "# 重庆市第十三届大学生程序设计大赛 \n2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。\n\n在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：\n![图片描述](./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png)\n银奖队伍（女队）：\n\n李雨璐\n\n柳晓洲\n\n代冰洋\n![图片描述](./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg)\n银奖队伍：\n\n张浩博\n\n胡家辉\n\n肖衍南\n![图片描述](./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png)\n铜奖队伍：\n\n曾路平\n\n刘佳豪\n\n余子烨\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。\n\n未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。",
+            "raw_content": "# 重庆市第十三届大学生程序设计大赛 \n2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。\n\n在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：\n![图片描述](file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213835.png)\n银奖队伍（女队）：\n\n李雨璐\n\n柳晓洲\n\n代冰洋\n![图片描述](file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213859.png)\n银奖队伍：\n\n张浩博\n\n胡家辉\n\n肖衍南\n![图片描述](file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213844.png)\n铜奖队伍：\n\n曾路平\n\n刘佳豪\n\n余子烨\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。\n\n未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。",
             "reading_time": 1,
             "source_file": null,
             "source_type": "online",
@@ -3225,7 +3353,7 @@
             "tags": "",
             "title": "2025年5月10日 我室成员在重庆市第十三届大学生程序设计大赛中斩获两银一铜的优异成绩",
             "updated_at": "2025-09-05 21:42:13.800382",
-            "view_count": 7,
+            "view_count": 16,
             "word_count": 1335
         },
         {
@@ -3246,7 +3374,7 @@
             "tags": "",
             "title": "2025年4月12日 实验室23级和24级的成员参加蓝桥杯取得7项省奖一项国奖的优异成绩",
             "updated_at": "2025-09-05 13:20:11",
-            "view_count": 1,
+            "view_count": 9,
             "word_count": 219
         },
         {
@@ -3267,7 +3395,7 @@
             "tags": "天梯赛",
             "title": "2025年4月19日 实验室23级24级以及22级参与团体天梯赛取得省级二等奖的优异成绩",
             "updated_at": "2025-09-05 21:24:52.980127",
-            "view_count": 52,
+            "view_count": 60,
             "word_count": 312
         }
     ],
@@ -3275,18 +3403,18 @@
         {
             "id": 20,
             "title": "2025年5月10日 我室成员在重庆市第十三届大学生程序设计大赛中斩获两银一铜的优异成绩",
-            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">重庆市第十三届大学生程序设计大赛</a></h1>\n<p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p>\n<p>在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍（女队）：</p>\n<p>李雨璐</p>\n<p>柳晓洲</p>\n<p>代冰洋<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍：</p>\n<p>张浩博</p>\n<p>胡家辉</p>\n<p>肖衍南<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n铜奖队伍：</p>\n<p>曾路平</p>\n<p>刘佳豪</p>\n<p>余子烨</p>\n<p>这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。</p>\n<p>未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。</p>",
+            "content": "<h1 id=\"_1\"><a class=\"toclink\" href=\"#_1\">重庆市第十三届大学生程序设计大赛</a></h1>\n<p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p>\n<p>在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213835.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍（女队）：</p>\n<p>李雨璐</p>\n<p>柳晓洲</p>\n<p>代冰洋<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213859.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n银奖队伍：</p>\n<p>张浩博</p>\n<p>胡家辉</p>\n<p>肖衍南<br />\n<img alt=\"图片描述\" class=\"responsive-image\" loading=\"lazy\" src=\"./uploads/notifications/images/file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213844.png\" / onclick=\"openImageModal(this)\" style=\"cursor: pointer;\"><br />\n铜奖队伍：</p>\n<p>曾路平</p>\n<p>刘佳豪</p>\n<p>余子烨</p>\n<p>这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。</p>\n<p>未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。</p>",
             "author": "ACM算法研究实验室",
             "category": "竞赛分享",
             "publish_date": "2025-09-05 21:39:55.883109",
             "reading_time": 1,
-            "view_count": 7,
+            "view_count": 16,
             "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">重庆市第十三届大学生程序设计大赛</a></h1> <p>2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。</p> <p>在此次大赛中，我室共三支队伍参赛并取得佳绩。",
             "status": "published",
             "order_index": 0,
             "card_style": "{\"type\": \"image\", \"imageUrl\": \"./uploads/notifications/cards/card_405cdd8c300141d3b9a92bfa4c02aa9f.jpg\"}",
             "tags": "",
-            "raw_content": "# 重庆市第十三届大学生程序设计大赛 \n2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。\n\n在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：\n![图片描述](./uploads/notifications/images/img_079cc2724ef144f3adf906f48fadcc57.png)\n银奖队伍（女队）：\n\n李雨璐\n\n柳晓洲\n\n代冰洋\n![图片描述](./uploads/notifications/images/img_37fd4a264de74f64ae1d5087bb35ecba.jpg)\n银奖队伍：\n\n张浩博\n\n胡家辉\n\n肖衍南\n![图片描述](./uploads/notifications/images/img_4277454242604619bc8eb5deb3189c44.png)\n铜奖队伍：\n\n曾路平\n\n刘佳豪\n\n余子烨\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。\n\n未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。",
+            "raw_content": "# 重庆市第十三届大学生程序设计大赛 \n2025年5月10日，重庆市第十三届大学生程序设计大赛在重庆大学虎溪校区成功举办。我实验室学子在比赛中奋力拼搏，最终斩获2银1铜的优异成绩。\n\n在此次大赛中，我室共三支队伍参赛并取得佳绩。他们凭借扎实的编程功底、出色的算法设计能力以及默契的团队协作精神，在激烈的竞争中脱颖而出。具体获奖情况如下：\n![图片描述](file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213835.png)\n银奖队伍（女队）：\n\n李雨璐\n\n柳晓洲\n\n代冰洋\n![图片描述](file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213859.png)\n银奖队伍：\n\n张浩博\n\n胡家辉\n\n肖衍南\n![图片描述](file:///C:/Users/daibi/Pictures/Screenshots/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-09-05%20213844.png)\n铜奖队伍：\n\n曾路平\n\n刘佳豪\n\n余子烨\n\n这些奖项不仅是对同学们个人能力的肯定，更是实验室坚持以赛促学、注重实践培养的成果体现。在此，我们向所有参赛并取得优异成绩的同学表示热烈祝贺，并感谢指导老师们的悉心指导与付出。\n\n未来，实验室将继续鼓励学子们积极参与各类高水平竞赛，不断挑战自我，勇攀科研高峰，为实验室增添更多荣誉。",
             "source_file": null,
             "source_type": "online",
             "created_at": "2025-09-05 13:39:55",
@@ -3301,7 +3429,7 @@
             "category": "竞赛分享",
             "publish_date": "2025-09-05 21:20:11.948774",
             "reading_time": 3,
-            "view_count": 1,
+            "view_count": 9,
             "excerpt": "2025年4月12日，我实验室成员积极参与了在西南大学北碚校区举行的蓝桥杯程序设计大赛。经过激烈角逐，我室学子表现优异，最终斩获7项省级奖项和1项国家级奖项的佳绩。 这些奖项不仅是对同学们个人能力的肯定，更是实验室长期以来坚持以赛促学、以赛促研的成果体现。在此，我们向所有参赛并获奖的同学表示热烈祝贺，同时也感谢指导老师们的辛勤付出。",
             "status": "published",
             "order_index": 0,
@@ -3322,7 +3450,7 @@
             "category": "竞赛分享",
             "publish_date": "2025-09-01 10:36:26.565869",
             "reading_time": 1,
-            "view_count": 52,
+            "view_count": 60,
             "excerpt": "<h1 id=\"1\"><a class=\"toclink\" href=\"1\">天梯赛团体二等奖</a></h1> <p>2025年4月19日，我实验室由22级、23级及24级共10名同学组成的参赛团队，前往重庆大学虎溪校区参加了团体天梯赛。</p> <p>经过激烈角逐，我室参赛团队凭借扎实的专业知识和团队协作精神，取得了省级二等奖的优异成绩。",
             "status": "published",
             "order_index": 1,
@@ -3502,6 +3630,8 @@
                 },
                 '/api/grades': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.grades || [])}),
                 '/api/research-areas': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.research_areas || [])}),
+                // 添加项目概览API端点
+                '/api/frontend/project-overview': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.project_overview || [])}),
                 // 添加科创页面缺失的API端点
                 '/api/innovation/frontend/stats': () => Promise.resolve({ok: true, json: () => Promise.resolve(window.STATIC_DATA.innovation_stats || {})}),
                 '/api/innovation/frontend/achievements': () => {
@@ -3607,6 +3737,7 @@
     }
     </script>
         
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
 <body>
     <!-- 粒子背景 -->
@@ -3724,13 +3855,24 @@
                             </div>
                         </div>
                         
-                        <!-- 轮播箭头 -->
-                        <button class="carousel-btn prev-btn absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-darker/80 border border-primary/30 rounded-full flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-300 z-10">
-                            <i class="fa fa-angle-left text-xl"></i>
-                        </button>
-                        <button class="carousel-btn next-btn absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-darker/80 border border-primary/30 rounded-full flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-300 z-10">
-                            <i class="fa fa-angle-right text-xl"></i>
-                        </button>
+                        <!-- 轮播箭头控制组 -->
+                        <div id="trainingCarouselNavControls" style="position: absolute; top: 50%; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 0 1.5rem; pointer-events: none;">
+                            <!-- 左箭头 -->
+                            <button id="trainingPrevSlideBtn" class="training-carousel-btn training-prev-btn" onclick="window.trainingProjectCarousel && window.trainingProjectCarousel.previousSlide()" 
+                                    style="pointer-events: all; position: relative; width: 50px; height: 50px; border-radius: 50%; background: rgba(26, 26, 46, 0.9); backdrop-filter: blur(10px); border: 2px solid rgba(58, 134, 255, 0.3); color: #3a86ff; font-size: 20px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); overflow: hidden;">
+                                <!-- 流光效果 -->
+                                <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent 30%, rgba(58, 134, 255, 0.6) 50%, transparent 70%); transform: translateX(-100%); animation: trainingCarouselGlow 3s infinite;"></div>
+                                <i class="fa fa-angle-left" style="position: relative; z-index: 1; transition: transform 0.3s ease;"></i>
+                            </button>
+                            
+                            <!-- 右箭头 -->
+                            <button id="trainingNextSlideBtn" class="training-carousel-btn training-next-btn" onclick="window.trainingProjectCarousel && window.trainingProjectCarousel.nextSlide()" 
+                                    style="pointer-events: all; position: relative; width: 50px; height: 50px; border-radius: 50%; background: rgba(26, 26, 46, 0.9); backdrop-filter: blur(10px); border: 2px solid rgba(58, 134, 255, 0.3); color: #3a86ff; font-size: 20px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); overflow: hidden;">
+                                <!-- 流光效果 -->
+                                <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent 30%, rgba(58, 134, 255, 0.6) 50%, transparent 70%); transform: translateX(-100%); animation: trainingCarouselGlow 3s infinite 1.5s;"></div>
+                                <i class="fa fa-angle-right" style="position: relative; z-index: 1; transition: transform 0.3s ease;"></i>
+                            </button>
+                        </div>
                     </div>
                     
                     <!-- 轮播指示器 -->
@@ -3900,7 +4042,7 @@
     <p class="copyright">© 2023 ACM算法与科研创新实验室. 保留所有权利.</p>
 </footer>
     
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https:/cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         // 粒子背景初始化（仅保留展示相关）
         particlesJS('particles-js', {
@@ -4064,8 +4206,19 @@
                     }
                 });
                 
+                // 更新页面指示器
+                this.updatePageIndicator();
+                
                 // 计算并设置容器高度
                 this.adjustContainerHeight();
+            }
+            
+            // 更新页面指示器显示
+            updatePageIndicator() {
+                const slideInfo = document.getElementById('trainingCurrentSlideInfo');
+                if (slideInfo && this.totalSlides > 0) {
+                    slideInfo.textContent = `${this.currentSlide + 1}/${this.totalSlides}`;
+                }
             }
             
             // 动态调整容器高度的方法
@@ -4958,6 +5111,38 @@
                 ).join('');
             }
 
+            // 添加大学生创新创业训练计划轮播页面指示器
+            const trainingCarouselContainer = document.getElementById('projectCarousel');
+            if (trainingCarouselContainer && data.length > 0) {
+                // 移除旧的页面指示器（如果存在）
+                const existingIndicator = trainingCarouselContainer.querySelector('#trainingCarouselPageIndicator');
+                if (existingIndicator) {
+                    existingIndicator.remove();
+                }
+                
+                // 创建新的页面指示器
+                const pageIndicator = document.createElement('div');
+                pageIndicator.id = 'trainingCarouselPageIndicator';
+                pageIndicator.style.cssText = `
+                    position: absolute;
+                    bottom: 20px;
+                    right: 20px;
+                    z-index: 100;
+                    background: rgba(26, 26, 46, 0.9);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(58, 134, 255, 0.3);
+                    border-radius: 20px;
+                    padding: 8px 16px;
+                    color: rgba(255, 255, 255, 0.8);
+                    font-size: 14px;
+                    font-weight: 500;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                    transition: all 0.3s ease;
+                `;
+                pageIndicator.innerHTML = `<span id="trainingCurrentSlideInfo">1/${data.length}</span>`;
+                trainingCarouselContainer.appendChild(pageIndicator);
+            }
+
             console.log('✅ 大学生创新创业训练计划渲染完成，项目数量:', data.length);
             
             // 重新初始化轮播器
@@ -4965,6 +5150,19 @@
                 if (window.trainingProjectCarousel) {
                     window.trainingProjectCarousel.reinit();
                     console.log('🔄 大学生创新创业训练计划轮播器已重新初始化');
+                }
+                
+                // 确保轮播导航控件可见
+                const trainingNavControls = document.getElementById('trainingCarouselNavControls');
+                if (trainingNavControls) {
+                    trainingNavControls.style.display = 'flex';
+                    console.log('✅ 大学生创新创业训练计划轮播导航控件已启用');
+                }
+                
+                // 确保页面指示器显示正确
+                const trainingSlideInfo = document.getElementById('trainingCurrentSlideInfo');
+                if (trainingSlideInfo && data.length > 0) {
+                    trainingSlideInfo.textContent = `1/${data.length}`;
                 }
             }, 200);
         }
