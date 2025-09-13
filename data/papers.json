@@ -5,9 +5,10 @@
       "Qin, Yuhao ;Zhang, Jinguo ;Qiu, Zhike ;Chen, Zichong ;Cai, Rui"
     ],
     "categories": [
-      32
+      20,
+      23
     ],
-    "category_ids": "[32]",
+    "category_ids": "[20, 23]",
     "citation_count": 0,
     "code_url": "",
     "created_at": "2025-08-29 11:50:23",
@@ -19,7 +20,7 @@
     "pdf_url": "https://www.scopus.com/pages/publications/105007866049",
     "status": "published",
     "title": "Boosting complex evidence theory with complex belief Renyi divergence for multi-source information fusion",
-    "updated_at": "2025-09-07T17:04:59.687200",
+    "updated_at": "2025-09-13T16:54:01.784894",
     "video_url": "",
     "year": 2025
   },
@@ -29,9 +30,10 @@
       "Qiu, Zhike ;Qin, Yuhao ;Chen, Zichong ;Zeng, Luping ;Cai, Rui"
     ],
     "categories": [
-      32
+      21,
+      23
     ],
-    "category_ids": "[32]",
+    "category_ids": "[21, 23]",
     "citation_count": 0,
     "code_url": "",
     "created_at": "2025-08-29 11:50:23",
@@ -43,7 +45,7 @@
     "pdf_url": "https://www.scopus.com/pages/publications/105010597723",
     "status": "published",
     "title": "Overcoming negative weighting in uncertainty-based methods: a multi-uncertainty clustering method for evidence fusion",
-    "updated_at": "2025-09-07T17:06:25.962473",
+    "updated_at": "2025-09-13T16:54:14.872731",
     "video_url": "",
     "year": 2025
   },
@@ -53,9 +55,10 @@
       "Qiu, Zhike  ;Qin, Yuhao ;Zeng, Luping ;Wen, Liangming"
     ],
     "categories": [
-      32
+      18,
+      28
     ],
-    "category_ids": "[32]",
+    "category_ids": "[18, 28]",
     "citation_count": 0,
     "code_url": "",
     "created_at": "2025-08-29 11:50:23",
@@ -67,7 +70,7 @@
     "pdf_url": "https://www.scopus.com/pages/publications/105012475216",
     "status": "published",
     "title": "MBFSNet: Multi-scale Binocular Fusion Semantic Co-occurrence Network for Multi-label Fundus Disease Diagnosis",
-    "updated_at": "2025-09-07T17:07:40.189503",
+    "updated_at": "2025-09-13T16:58:06.806291",
     "video_url": "",
     "year": 2025
   },
@@ -77,9 +80,10 @@
       "Qin, Yuhao ;Qiu, Zhike ;Chen, Zichong ;Cai, Rui"
     ],
     "categories": [
-      32
+      21,
+      23
     ],
-    "category_ids": "[32]",
+    "category_ids": "[21, 23]",
     "citation_count": 0,
     "code_url": "",
     "created_at": "2025-08-29 11:50:23",
@@ -91,33 +95,9 @@
     "pdf_url": "https://www.scopus.com/pages/publications/105007350762",
     "status": "published",
     "title": "An effective approach for fault diagnosis: Conflict management and BBA generation",
-    "updated_at": "2025-09-07T17:09:13.820133",
+    "updated_at": "2025-09-13T16:58:16.567720",
     "video_url": "",
     "year": 2025
-  },
-  {
-    "abstract": "",
-    "authors": [
-      "Qiu, Zhike  ;Qin, Yuhao"
-    ],
-    "categories": [
-      32
-    ],
-    "category_ids": "[32]",
-    "citation_count": 0,
-    "code_url": "",
-    "created_at": "2025-08-29 11:50:23",
-    "demo_url": "",
-    "doi": "",
-    "id": 19,
-    "journal": "ACM International Conference Proceeding Series",
-    "order_index": 6,
-    "pdf_url": "https://www.scopus.com/pages/publications/85209112675",
-    "status": "published",
-    "title": "Hotspots and Current Status of Global Explainable Artificial Intelligence: A Bibliometric Analysis",
-    "updated_at": "2025-09-07T17:10:05.616030",
-    "video_url": "",
-    "year": 2024
   },
   {
     "abstract": "",
@@ -125,9 +105,9 @@
       "Yin, Zhixin ;Chen, Shanxiong ;Wang, Dingwang ;Peng, Xihua ;Zhou, Jun"
     ],
     "categories": [
-      27
+      28
     ],
-    "category_ids": "[27]",
+    "category_ids": "[28]",
     "citation_count": 0,
     "code_url": "",
     "created_at": "2025-09-08T17:53:25.790012",
@@ -139,7 +119,7 @@
     "pdf_url": "https://link.springer.com/chapter/10.1007/978-3-031-21648-0_26",
     "status": "published",
     "title": "Yi Characters Online Handwriting Recognition Models Based on Recurrent Neural Network: RnnNet-Yi and ParallelRnnNet-Yi",
-    "updated_at": "2025-09-08T17:53:25.790012",
+    "updated_at": "2025-09-13T16:59:12.186763",
     "video_url": "",
     "year": 2022
   }

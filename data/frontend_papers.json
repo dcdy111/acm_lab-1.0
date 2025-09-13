@@ -5,11 +5,13 @@
       "Qin, Yuhao ;Zhang, Jinguo ;Qiu, Zhike ;Chen, Zichong ;Cai, Rui"
     ],
     "categories": [
-      32
+      20,
+      23
     ],
-    "category_ids": "[32]",
+    "category_ids": "[20, 23]",
     "category_names": [
-      "普刊"
+      "中科院二区",
+      "JCR一区"
     ],
     "citation_count": 0,
     "code_url": "",
@@ -22,7 +24,7 @@
     "pdf_url": "https://www.scopus.com/pages/publications/105007866049",
     "status": "published",
     "title": "Boosting complex evidence theory with complex belief Renyi divergence for multi-source information fusion",
-    "updated_at": "2025-09-07T17:04:59.687200",
+    "updated_at": "2025-09-13T16:54:01.784894",
     "video_url": "",
     "year": 2025
   },
@@ -32,11 +34,13 @@
       "Qiu, Zhike ;Qin, Yuhao ;Chen, Zichong ;Zeng, Luping ;Cai, Rui"
     ],
     "categories": [
-      32
+      21,
+      23
     ],
-    "category_ids": "[32]",
+    "category_ids": "[21, 23]",
     "category_names": [
-      "普刊"
+      "中科院三区",
+      "JCR一区"
     ],
     "citation_count": 0,
     "code_url": "",
@@ -49,7 +53,7 @@
     "pdf_url": "https://www.scopus.com/pages/publications/105010597723",
     "status": "published",
     "title": "Overcoming negative weighting in uncertainty-based methods: a multi-uncertainty clustering method for evidence fusion",
-    "updated_at": "2025-09-07T17:06:25.962473",
+    "updated_at": "2025-09-13T16:54:14.872731",
     "video_url": "",
     "year": 2025
   },
@@ -59,11 +63,13 @@
       "Qiu, Zhike  ;Qin, Yuhao ;Zeng, Luping ;Wen, Liangming"
     ],
     "categories": [
-      32
+      18,
+      28
     ],
-    "category_ids": "[32]",
+    "category_ids": "[18, 28]",
     "category_names": [
-      "普刊"
+      "CCF-C",
+      "EI会议"
     ],
     "citation_count": 0,
     "code_url": "",
@@ -76,7 +82,7 @@
     "pdf_url": "https://www.scopus.com/pages/publications/105012475216",
     "status": "published",
     "title": "MBFSNet: Multi-scale Binocular Fusion Semantic Co-occurrence Network for Multi-label Fundus Disease Diagnosis",
-    "updated_at": "2025-09-07T17:07:40.189503",
+    "updated_at": "2025-09-13T16:58:06.806291",
     "video_url": "",
     "year": 2025
   }
